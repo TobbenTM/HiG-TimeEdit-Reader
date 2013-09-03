@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp" >
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/time_container"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:layout_gravity="center_vertical" >
+
+        <TextView
+            android:id="@+id/text_time"
+            android:layout_height="match_parent"
+            android:layout_width="fill_parent"
+            android:textSize="15sp"
+            android:lines="3"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal|center_vertical" />
+
+    </LinearLayout>
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/text_container"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:layout_gravity="left" >
+
+        <TextView
+            android:id="@+id/text_name"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@+id/text_room"
+            android:textSize="15sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@+id/text_lecturer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/text_date"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:singleLine="true"
+        android:paddingLeft="30dp"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+</LinearLayout>

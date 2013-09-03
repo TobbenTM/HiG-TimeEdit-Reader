@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ListView
+        android:id="@+id/subs_list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <View android:layout_height="1dp"
+        android:layout_width="fill_parent"
+        android:background="#90AAAAAA"/>
+
+    <Button
+        android:id="@+id/subs_add_btn"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/subs_add"
+        android:onClick="subAdd"
+        style="@android:style/Widget.Holo.Button.Borderless"/>
+
+</LinearLayout>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ab_start">
+        #3E8BB1
+    </color>
+    <color name="ab_end">
+        #417690
+    </color>
+    <color name="listi_bg_start">
+        #44222222
+    </color>
+    <color name="listi_bg_end">
+        #44111111
+    </color>
+    <color name="listd_bg_start">
+        #442365BF
+    </color>
+    <color name="listd_bg_end">
+        #442159A3
+    </color>
+    <color name="list_alt_text">
+        #C21B1B
+    </color>
+    <color name="list_done_text">
+        #1ABD1A
+    </color>
+    <color name="list_starting_text">
+        #F0B12B
+    </color>
+</resources>

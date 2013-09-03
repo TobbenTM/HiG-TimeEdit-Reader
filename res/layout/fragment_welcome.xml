@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:padding="10dp"
+              android:layout_height="match_parent">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/welcome_text"
+            android:id="@+id/textView"
+            android:layout_gravity="left|center_vertical"/>
+
+    <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/welcome_nores_error"
+            android:id="@+id/werror_text"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone"
+            android:paddingTop="20dp" />
+
+    <Button
+            android:id="@+id/welcome_nores_button"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingTop="10dp"
+            android:text="Retry"
+            android:visibility="gone"
+            android:onClick="wclose" />
+
+    <Spinner
+            android:id="@+id/search_spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+    <EditText
+            android:id="@+id/search_edittext"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:singleLine="true"
+            android:imeOptions="actionDone" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar2"
+        android:visibility="gone"
+        android:layout_gravity="center_horizontal"/>
+
+    <ListView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/search_result_list"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+
+</LinearLayout>
