@@ -2,6 +2,8 @@
 
 Play store link: TODO
 
+Currently in stage: beta
+
 
 ##Using libraries:
 

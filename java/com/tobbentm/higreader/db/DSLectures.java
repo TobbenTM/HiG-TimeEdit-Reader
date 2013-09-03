@@ -3,7 +3,6 @@ package com.tobbentm.higreader.db;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -25,7 +24,6 @@ import java.util.List;
         + "); ";*/
 
 public class DSLectures {
-    //TODO: Function to get all lectures from date to date and filter out unwanted courses
 
     private SQLiteDatabase database;
     private DBHelper helper;
@@ -42,13 +40,6 @@ public class DSLectures {
 
     public void close(){
         helper.close();
-    }
-
-    public void addLecture(String lecture_id, String name, String room, String lecturer, String date, String time){
-        String query = "INSERT INTO lectures('lectureid','name','room','lecturer','date','time')"
-                + "VALUES('"+lecture_id+"','"+name+"','"+room+"','"+lecturer+"','"+date
-                + "','"+time+"');";
-        database.execSQL(query);
     }
 
     public void addLecture(String name, String room, String lecturer, String date, String time){

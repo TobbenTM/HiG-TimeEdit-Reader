@@ -3,23 +3,14 @@ package com.tobbentm.higreader;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.tobbentm.higreader.db.DBHelper;
-import com.tobbentm.higreader.db.DBSubscriptions;
 import com.tobbentm.higreader.db.DSSubscriptions;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.sql.SQLException;
-import java.util.List;
 
 public class MainActivity extends Activity {
 
@@ -110,15 +101,6 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void dbToast(){
-        String msg = "DB: ";
-        List<DBSubscriptions> list = subscriptionsDatasource.getSubscriptions();
-        for (DBSubscriptions sub : list){
-            msg += sub.toString() + "\t";
-        }
-        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
-    }
-
     private void dbTruncate(){
         /*try {
             backupDatabase();
@@ -142,6 +124,9 @@ public class MainActivity extends Activity {
         showAddDialog();
     }
 
+    /*
+    Yay for commented code!!
+
     public static void backupDatabase() throws IOException {
         //Open your local db as the input stream
         String inFileName = "/data/data/com.tobbentm.higreader/databases/higreader.db";
@@ -162,5 +147,5 @@ public class MainActivity extends Activity {
         output.flush();
         output.close();
         fis.close();
-    }
+    }*/
 }
