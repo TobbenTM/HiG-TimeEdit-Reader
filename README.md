@@ -16,3 +16,5 @@ See LICENSE file
 * Colorize listviews either per subscription or per course
 * Implement swipe to unsubscribe from individual courses
 * Create new icon
+* Autoupdate at intervals and after initial welcome dialog
+* Remove unneeded permissions (Storage R/W)
