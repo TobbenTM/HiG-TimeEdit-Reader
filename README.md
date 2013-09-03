@@ -22,3 +22,7 @@ See LICENSE file
 * Autoupdate at intervals and after initial welcome dialog
 * Remove unneeded permissions (Storage R/W)
 * Translate to Norwegian
+
+##Known bugs:
+
+* Samsung Note unable to properly parse date, causing app to display all dates as "Today"
