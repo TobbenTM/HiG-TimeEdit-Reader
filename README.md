@@ -25,4 +25,4 @@ See LICENSE file
 
 ##Known bugs:
 
-* Samsung Note unable to properly parse date, causing app to display all dates as "Today"
+* ~~Samsung Note unable to properly parse date, causing app to display all dates as "Today"~~

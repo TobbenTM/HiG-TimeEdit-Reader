@@ -3,6 +3,7 @@ package com.tobbentm.higreader;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,7 @@ import java.util.Date;
 public class LectureCursorAdapter extends CursorAdapter {
 
     private LayoutInflater inflater;
-    private final SimpleDateFormat orgDate = new SimpleDateFormat("EEE yyyy-MM-dd");
+    private final SimpleDateFormat orgDate = new SimpleDateFormat("yyyy-MM-dd");
     private final SimpleDateFormat newDate = new SimpleDateFormat("EEE dd/MM");
 
     public LectureCursorAdapter(Context context, Cursor c, int flags) {
@@ -38,7 +39,7 @@ public class LectureCursorAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         Date date = new Date();
         try {
-            date = orgDate.parse(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DATE)));
+            date = orgDate.parse(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DATE)).replaceAll("^.{4}", ""));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -80,6 +81,8 @@ public class LectureCursorAdapter extends CursorAdapter {
             String currenttime = timef.format(new Date());
             long t = date.getTime();
             String quartertime = timef.format(new Date(t-(15*60000)));
+            Log.d("TIME", ""+t);
+            Log.d("TIME", quartertime);
 
             tvName.setText(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_NAME)));
             tvRoom.setText("Room:\t\t"+cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ROOM)));
@@ -96,7 +99,8 @@ public class LectureCursorAdapter extends CursorAdapter {
                     Integer.parseInt(endTime) < Integer.parseInt(currenttime)){
                 tvName.setTextColor(Color.parseColor("#1ABD1A"));
             } else if(today &&
-                    Integer.parseInt(quartertime) < Integer.parseInt(startTime)){
+                    Integer.parseInt(quartertime) < Integer.parseInt(startTime) &&
+                    Integer.parseInt(currenttime) < Integer.parseInt(startTime)){
                 tvName.setTextColor(Color.parseColor("#F0B12B"));
             } else {
                 tvName.setTextColor(tvRoom.getCurrentTextColor());
