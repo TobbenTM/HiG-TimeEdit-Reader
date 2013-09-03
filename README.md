@@ -1,6 +1,6 @@
 #HiG TimeEdit Reader
 
-Play store link: [https://play.google.com/store/apps/details?id=com.tobbentm.higreader]https://play.google.com/store/apps/details?id=com.tobbentm.higreader
+Play store link: https://play.google.com/store/apps/details?id=com.tobbentm.higreader
 
 Currently in stage: beta
 
