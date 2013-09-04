@@ -11,7 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:translationY="-100dp"
-        android:id="@+id/timetable_pb" />
+        android:id="@+id/timetable_pb"
+        android:visibility="gone"/>
 
     <ListView
         android:id="@id/android:list"

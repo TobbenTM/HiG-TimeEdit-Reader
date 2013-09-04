@@ -2,6 +2,7 @@ package com.tobbentm.higreader;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,13 +13,13 @@ import com.tobbentm.higreader.db.DSSubscriptions;
 
 import java.sql.SQLException;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements WelcomeFragment.readyToUpdateListener, AddSubFragment.readyToUpdateListener {
 
     FragmentManager fm = getFragmentManager();
     SubscriptionsFragment subsFragment;
     AddSubFragment addFragment;
+    TimeTableFragment timeTableFragment;
     private DBHelper dbhelper = new DBHelper(this);
-    //private DSLectures lecturesDatasource;
     private DSSubscriptions subscriptionsDatasource;
 
     @Override
@@ -38,8 +39,9 @@ public class MainActivity extends Activity {
         if(subscriptionsDatasource.getSize() == 0){
             dbTruncate();
             showWelcomeDialog();
+            showTimeTable();
         }else{
-            //updateLectures();
+            showTimeTable();
         }
     }
 
@@ -58,6 +60,14 @@ public class MainActivity extends Activity {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private void showTimeTable(){
+        findViewById(R.id.activity_pb).setVisibility(View.GONE);
+        timeTableFragment = new TimeTableFragment();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.activity_frame, timeTableFragment, "fragment_timetable");
+        ft.commit();
     }
 
     private void showWelcomeDialog() {
@@ -122,6 +132,11 @@ public class MainActivity extends Activity {
     public void subAdd(View view){
         subsFragment.getDialog().dismiss();
         showAddDialog();
+    }
+
+    @Override
+    public void readyToUpdate() {
+        timeTableFragment.updateLectures();
     }
 
     /*

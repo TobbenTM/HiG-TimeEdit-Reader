@@ -1,5 +1,6 @@
 package com.tobbentm.higreader;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -34,8 +35,23 @@ import java.sql.SQLException;
 public class WelcomeFragment extends DialogFragment {
 
     private DSSubscriptions datasource;
+    private readyToUpdateListener listener;
 
     public WelcomeFragment(){} //Required
+
+    public interface readyToUpdateListener{
+        public void readyToUpdate();
+    }
+
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+        try{
+            listener = (readyToUpdateListener) activity;
+        }catch (ClassCastException e){
+            throw new ClassCastException(activity.toString());
+        }
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -114,8 +130,6 @@ public class WelcomeFragment extends DialogFragment {
                 public void onClick(View v)
                 {
                     if(et.getText().length() > 0){
-                        //Used to close dialog
-                        Boolean closeDialog = false;
 
                         //Manager to close keyboard after searching
                         InputMethodManager imgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -172,6 +186,7 @@ public class WelcomeFragment extends DialogFragment {
                                         }
                                         datasource.addSubscription(results[position][0], results[position][1]);
                                         datasource.close();
+                                        listener.readyToUpdate();
                                         dismiss();
                                     }
                                 });
@@ -189,9 +204,6 @@ public class WelcomeFragment extends DialogFragment {
                                 getActivity().finish();
                             }
                         });
-
-                        if(closeDialog)
-                            dismiss();
                     }else{
                         //If nothing is written in search field, this will show up
                         Toast.makeText(getActivity(), "Please search for something sensible", Toast.LENGTH_SHORT).show();

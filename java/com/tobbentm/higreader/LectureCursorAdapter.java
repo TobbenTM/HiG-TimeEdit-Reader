@@ -42,7 +42,10 @@ public class LectureCursorAdapter extends CursorAdapter {
             date = orgDate.parse(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DATE)).replaceAll("^.{4}", ""));
         } catch (ParseException e) {
             e.printStackTrace();
+        } catch (NullPointerException n) {
+            n.printStackTrace();
         }
+
         String currentDate = newDate.format(date);
 
         if(currentDate.contains(newDate.format(new Date()))){

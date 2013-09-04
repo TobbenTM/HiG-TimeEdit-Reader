@@ -3,7 +3,6 @@ package com.tobbentm.higreader;
 import android.app.ListFragment;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,7 +20,6 @@ import com.tobbentm.higreader.db.DSLectures;
 import com.tobbentm.higreader.db.DSSubscriptions;
 
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -34,7 +32,6 @@ public class TimeTableFragment extends ListFragment {
     DSSubscriptions subscriptionsDatasource;
     DBHelper helper;
     private LectureCursorAdapter adapter;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
@@ -51,12 +48,12 @@ public class TimeTableFragment extends ListFragment {
         subscriptionsDatasource = new DSSubscriptions(getActivity());
         helper = new DBHelper(getActivity());
 
-        Log.d("FRAG", "Opening datasources");
+        //Log.d("FRAG", "Opening datasources");
         try {
             datasource.open();
             subscriptionsDatasource.open();
         } catch (SQLException e) {
-            Log.d("ERROR", "SQException in TimeTableFragment onActivityCreated");
+            //Log.d("ERROR", "SQException in TimeTableFragment onActivityCreated");
             e.printStackTrace();
         }
 
@@ -66,7 +63,10 @@ public class TimeTableFragment extends ListFragment {
         adapter = new LectureCursorAdapter(getActivity(), cursor, 0);
         setListAdapter(adapter);
 
-        pb.setVisibility(View.GONE);
+        if(subscriptionsDatasource.getSize() != 0){
+            updateLectures();
+        }
+
     }
 
     @Override
@@ -131,11 +131,11 @@ public class TimeTableFragment extends ListFragment {
             public void onSuccess(String response) {
                 String[][] result = TimeParser.timetable(response);
 
-                Log.d("TIMETABLE\t", Arrays.deepToString(result));
+                //Log.d("TIMETABLE\t", Arrays.deepToString(result));
 
                 helper.truncate(helper.getWritableDatabase(), DBHelper.TABLE_LECTURES);
                 for(String[] arr : result){
-                    Log.d("TIMETABLE\t", "Adding lecture:\t" + Arrays.toString(arr));
+                    //Log.d("TIMETABLE\t", "Adding lecture:\t" + Arrays.toString(arr));
                     datasource.addLecture(arr[2], arr[3], arr[4], arr[0], arr[1]);
                 }
 
@@ -147,6 +147,16 @@ public class TimeTableFragment extends ListFragment {
                         pb.setVisibility(View.GONE);
                     }
                 });
+            }
+            @Override
+            public void onFailure(Throwable e, String response){
+                pb.animate().translationY(-10.0F).withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        pb.setVisibility(View.GONE);
+                    }
+                });
+                Toast.makeText(getActivity(), "Could not update timetable.", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -1,5 +1,6 @@
 package com.tobbentm.higreader;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -33,8 +34,24 @@ import java.sql.SQLException;
 public class AddSubFragment extends DialogFragment {
 
     private DSSubscriptions datasource;
+    private readyToUpdateListener listener;
 
     public AddSubFragment(){}
+
+
+    public interface readyToUpdateListener{
+        public void readyToUpdate();
+    }
+
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+        try{
+            listener = (readyToUpdateListener) activity;
+        }catch (ClassCastException e){
+            throw new ClassCastException(activity.toString());
+        }
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -144,7 +161,7 @@ public class AddSubFragment extends DialogFragment {
                                     }
                                     datasource.addSubscription(results[position][0], results[position][1]);
                                     datasource.close();
-
+                                    listener.readyToUpdate();
                                     dismiss();
                                 }
                             });

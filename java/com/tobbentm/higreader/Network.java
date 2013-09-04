@@ -35,7 +35,6 @@ public class Network {
     }
 
     public static void search(String term, String type, AsyncHttpResponseHandler handler){
-        //Log.d("NET", "Starting network");
         final int iType;
         if(type.contains("Class")){
             iType = 182;
@@ -46,7 +45,6 @@ public class Network {
         }
 
         final String baseURL = "https://web.timeedit.se/hig_no/db1/timeedit/p/open/objects.html?max=15&partajax=t&l=en&types=" + iType + "&search_text=";
-        //Log.d("NET", "Stopped network");
         client.get(baseURL + term, handler);
     }
 }
