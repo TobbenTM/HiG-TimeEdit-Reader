@@ -23,6 +23,7 @@ See LICENSE file
 * ~~Remove unneeded permissions (Storage R/W)~~
 * Translate to Norwegian
 * Hide lectures that are older than today (Might not be needed with autoupdate)
+* Update timetable after user removes a subscription 
 
 ##Known bugs:
 
