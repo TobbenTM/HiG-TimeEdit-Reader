@@ -24,8 +24,11 @@ See LICENSE file
 * Translate to Norwegian
 * Hide lectures that are older than today (Might not be needed with autoupdate)
 * Update timetable after user removes a subscription 
+* Adjust progressbar in timetable
+* Updating uses too much bandwidth, set intervalls to update
 
 ##Known bugs:
 
 * ~~Samsung Note unable to properly parse date, causing app to display all dates as "Today"~~
 * Somewhat slow when closing the app, might need some optimizing
+* Unable to parse time correctly between 00.00 and 01.00 at night
