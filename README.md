@@ -4,6 +4,8 @@ Play store link: https://play.google.com/store/apps/details?id=com.tobbentm.higr
 
 Currently in stage: beta
 
+![Icon](http://tobbentm.com/ul/HiG-Reader_Icon.png "App Icon")
+
 
 ##Using libraries:
 
@@ -18,23 +20,28 @@ See LICENSE file
 * Colorize listviews either per subscription or per course
 * Implement swipe to unsubscribe from individual courses
 * Implement pull to refresh on timetable listview
+* Hide lectures that are older than today (Might not be needed with autoupdate)
+* Update timetable after user removes a subscription 
+* Adjust progressbar in timetable
+* Parse, save and show if a lecture has been changed in the last 4 days (html tag)
+* Remove progressbar in timetable, and instead add it to actionbar(?)
 * ~~Create new icon~~
 * ~~Autoupdate at intervals and after initial welcome dialog~~
 * ~~Remove unneeded permissions (Storage R/W)~~
 * ~~Translate to Norwegian~~
-* Hide lectures that are older than today (Might not be needed with autoupdate)
-* Update timetable after user removes a subscription 
-* Adjust progressbar in timetable
 * ~~Updating uses too much bandwidth, set intervalls to update~~
-* Parse, save and show if a lecture has been changed in the last 4 days (html tag)
 
 ##Known bugs:
 
-* ~~Samsung Note unable to properly parse date, causing app to display all dates as "Today"~~
 * Somewhat slow when closing the app, might need some optimizing
+* ~~Samsung Note unable to properly parse date, causing app to display all dates as "Today"~~
 * ~~Unable to parse time correctly between 00.00 and 01.00 at night~~
 * ~~ANR when closing app directly after updating~~
 
 ##Known problems
 
 * TimeEdit HTML is really bloated, with a least ~1.3k lines. Not much to do about it. Translates to about 250kB for each update.
+
+##Screens
+
+![Screenshots](http://tobbentm.com/ul/HiG-Reader_Screens.png "Screenshots")
