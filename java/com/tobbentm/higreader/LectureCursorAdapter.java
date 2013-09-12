@@ -22,8 +22,10 @@ import java.util.Date;
 public class LectureCursorAdapter extends CursorAdapter {
 
     private LayoutInflater inflater;
+    private Date date;
     private final SimpleDateFormat orgDate = new SimpleDateFormat("yyyy-MM-dd");
     private final SimpleDateFormat newDate = new SimpleDateFormat("EEE dd/MM");
+    private final SimpleDateFormat timef = new SimpleDateFormat("HHmm");
 
     public LectureCursorAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
@@ -37,7 +39,9 @@ public class LectureCursorAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        Date date = new Date();
+        //TODO: Optimize this shit, should not be this much work on one list item
+
+        date = new Date();
         try {
             date = orgDate.parse(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DATE)).replaceAll("^.{4}", ""));
         } catch (ParseException e) {
@@ -61,7 +65,6 @@ public class LectureCursorAdapter extends CursorAdapter {
 
             tvDate.setText(currentDate);
             view.setBackgroundResource(R.drawable.list_date_background);
-            //Log.d("BIND", "Binding date view, name="+cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_NAME)));
         }else{
             view.findViewById(R.id.text_date).setVisibility(View.GONE);
             view.findViewById(R.id.time_container).setVisibility(View.VISIBLE);
@@ -80,12 +83,17 @@ public class LectureCursorAdapter extends CursorAdapter {
                 startTime = "0000";
                 endTime = "0000";
             }
-            SimpleDateFormat timef = new SimpleDateFormat("HHmm");
+
+            date = new Date();
+            long currentclk = date.getTime();
             String currenttime = timef.format(new Date());
-            long t = date.getTime();
-            String quartertime = timef.format(new Date(t-(15*60*1000)));
-            Log.d("TIME", ""+t);
-            Log.d("TIME", quartertime);
+            try {
+                date = timef.parse(startTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                date = new Date(0L);
+            }
+            long startclk = date.getTime();
 
             tvName.setText(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_NAME)));
             tvRoom.setText(context.getResources().getString(R.string.timetable_room) + ":\t\t"+cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ROOM)));
@@ -102,14 +110,12 @@ public class LectureCursorAdapter extends CursorAdapter {
                     Integer.parseInt(endTime) < Integer.parseInt(currenttime)){
                 tvName.setTextColor(Color.parseColor("#1ABD1A"));
             } else if(today &&
-                    Integer.parseInt(quartertime) < Integer.parseInt(startTime) &&
-                    Integer.parseInt(currenttime) < Integer.parseInt(startTime)){
+                    currentclk < startclk &&
+                    currentclk > startclk - (15*60*1000)){
                 tvName.setTextColor(Color.parseColor("#F0B12B"));
             } else {
                 tvName.setTextColor(tvRoom.getCurrentTextColor());
             }
-
-            //Log.d("BIND", "Binding normal view, name="+cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_NAME)));
         }
     }
 }
