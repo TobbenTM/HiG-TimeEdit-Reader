@@ -66,23 +66,33 @@ public class DBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(DATABASE_CREATE_1);
         sqLiteDatabase.execSQL(DATABASE_CREATE_2);
         sqLiteDatabase.execSQL(DATABASE_CREATE_3);
-        for(String setting : SETTINGS_VALUES){
-            sqLiteDatabase.execSQL("INSERT INTO " + TABLE_SETTINGS + "(" + COLUMN_SETTING
-            + ", " + COLUMN_VALUE + ") VALUES ('" + setting + "', '');");
-        }
+        createSettings(sqLiteDatabase);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldV, int newV) {
         Log.d("DB", " Upgrading DB from " + oldV);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_LECTURES + ";");
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_SETTINGS + ";");
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_SUBSCRIPTIONS + ";");
-        onCreate(sqLiteDatabase);
+
+        switch (oldV){
+            case 7:
+                createSettings(sqLiteDatabase);
+        }
+
+        //sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_LECTURES + ";");
+        //sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_SETTINGS + ";");
+        //sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_SUBSCRIPTIONS + ";");
+        //onCreate(sqLiteDatabase);
     }
 
     public void truncate(SQLiteDatabase sqLiteDatabase, String table){
         sqLiteDatabase.execSQL("DELETE FROM " + table);
+    }
+
+    private void createSettings(SQLiteDatabase sqLiteDatabase){
+        for(String setting : SETTINGS_VALUES){
+            sqLiteDatabase.execSQL("INSERT INTO " + TABLE_SETTINGS + "(" + COLUMN_SETTING
+                    + ", " + COLUMN_VALUE + ") VALUES ('" + setting + "', '');");
+        }
     }
 
 

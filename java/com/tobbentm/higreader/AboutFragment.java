@@ -4,9 +4,11 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 /**
  * Created by Tobias on 03.09.13.
@@ -20,7 +22,14 @@ public class AboutFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_about, null);
-
+        TextView textV = (TextView) view.findViewById(R.id.about_text);
+        String text = textV.getText().toString();
+        try {
+            text += "\n\nYou are running version:\t" + getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        textV.setText(text);
         builder.setView(view)
                 .setTitle(getResources().getString(R.string.about_title))
                 .setNeutralButton(getResources().getString(R.string.about_close_btn), new DialogInterface.OnClickListener() {
