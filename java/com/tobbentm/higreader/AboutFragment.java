@@ -22,8 +22,8 @@ public class AboutFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_about, null);
 
         builder.setView(view)
-                .setTitle("About")
-                .setNeutralButton("Close", new DialogInterface.OnClickListener() {
+                .setTitle(getResources().getString(R.string.about_title))
+                .setNeutralButton(getResources().getString(R.string.about_close_btn), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 

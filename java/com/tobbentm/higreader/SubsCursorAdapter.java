@@ -48,7 +48,7 @@ public class SubsCursorAdapter extends CursorAdapter {
         img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ctx, "Cancelled: " + name, Toast.LENGTH_LONG).show();
+                Toast.makeText(ctx, ctx.getResources().getString(R.string.subs_unsubscribed) + name, Toast.LENGTH_LONG).show();
                 deleteSub(id);
             }
         });

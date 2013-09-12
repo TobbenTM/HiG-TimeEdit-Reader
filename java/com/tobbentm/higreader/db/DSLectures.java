@@ -38,6 +38,10 @@ public class DSLectures {
         database = helper.getWritableDatabase();
     }
 
+    public boolean isOpen(){
+        return database.isOpen();
+    }
+
     public void close(){
         helper.close();
     }

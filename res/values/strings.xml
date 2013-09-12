@@ -2,15 +2,41 @@
 <resources>
 
     <string name="app_name">HiG TimeEdit Reader</string>
+    <string name="app_language">en</string>
+
     <string name="action_settings">About</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_subscriptions">Subscriptions</string>
     <string name="action_update">Update</string>
-    <string name="action_colorize">Colorize!</string>
+
+    <string name="subs_add">Add</string>
+    <string name="subs_close_btn">Close</string>
+    <string name="subs_title">Subscriptions</string>
+    <string name="subs_unsubscribed">Unsubscribed: </string>
+    <string name="subs_content_desc">Unsubscribe</string>
+
+    <string name="add_title">Add subscription</string>
+    <string name="add_search_btn">Search</string>
+    <string name="add_retry_btn">Retry</string>
+    <string name="add_search_hint">Class/Course name</string>
+    <string name="add_net_failure">Something went wrong!</string>
+    <string name="add_field_empty">Please search for something sensible</string>
+
     <string name="welcome_text">This is an app I made as a personal tool. I do not take responsibility if you happen to miss any lectures because of using this app. This app is also opensource. You will find the repository here: www.github.com/tobbentm.\n\nTo start, please add a class or course subscription:</string>
     <string name="welcome_nores_error">No results, please try again</string>
+    <string name="welcome_title">Welcome!</string>
+    <string name="welcome_retry_btn">Retry</string>
+    <string name="welcome_search_btn">Search</string>
+    <string name="welcome_search_hint">Class/Course name</string>
+    <string name="welcome_net_failure">Something went wrong!</string>
+    <string name="welcome_field_empty">Please search for something sensible</string>
+
     <string name="timetable_today">Today</string>
-    <string name="subs_add">Add</string>
+    <string name="timetable_room">Room</string>
+    <string name="timetable_lecturer">Lecturer</string>
+    <string name="timetable_update_error">Could not update timetable.</string>
+
+    <string name="about_title">About</string>
+    <string name="about_close_btn">Close</string>
     <string name="about_main">You can find me at www.tobbentm.com\nRepository for this app at www.github.com/tobbentm\n\nLibraries used:\nandroid-async-http\nhttp://loopj.com/android-async-http/</string>
 
     <string-array name="search_array">

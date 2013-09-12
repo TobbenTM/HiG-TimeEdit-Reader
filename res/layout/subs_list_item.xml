@@ -30,6 +30,7 @@
 
         <ImageView
             android:id="@+id/cancel_img"
+            android:contentDescription="@string/subs_content_desc"
             android:layout_gravity="center_vertical"
             android:paddingRight="20dp"
             android:layout_height="wrap_content"

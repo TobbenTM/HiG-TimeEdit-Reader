@@ -34,11 +34,11 @@ public class Network {
         client.get(baseURL + ids + endURL, handler);
     }
 
-    public static void search(String term, String type, AsyncHttpResponseHandler handler){
+    public static void search(String term, String type, String[] searchArray, AsyncHttpResponseHandler handler){
         final int iType;
-        if(type.contains("Class")){
+        if(type.contains(searchArray[0])){
             iType = 182;
-        }else if(type.contains("Course")){
+        }else if(type.contains(searchArray[1])){
             iType = 183;
         }else{
             iType = 0;

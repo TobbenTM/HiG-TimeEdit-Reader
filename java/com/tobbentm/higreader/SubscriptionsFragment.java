@@ -32,8 +32,8 @@ public class SubscriptionsFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_subs, null);
 
         builder.setView(view)
-                .setTitle("Subscriptions")
-                .setNeutralButton("Close", new DialogInterface.OnClickListener() {
+                .setTitle(getResources().getString(R.string.subs_title))
+                .setNeutralButton(getResources().getString(R.string.subs_close_btn), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 

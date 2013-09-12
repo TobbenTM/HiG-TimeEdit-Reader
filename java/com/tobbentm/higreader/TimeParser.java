@@ -71,11 +71,6 @@ public class TimeParser {
             }
         }
 
-        //Log.d("RES", Arrays.toString(parsed));
-        //Log.d("RES", "\n\n\n");
-        //Log.d("RES", id.size() + id.toString());
-        //Log.d("RES", name.size() + name.toString());
-
         String[][] result = new String[id.size()][2];
 
         //Join the two arrays into one 2D array
@@ -83,10 +78,6 @@ public class TimeParser {
             result[i][0] = id.get(i);
             result[i][1] = name.get(i);
         }
-
-        //Log.d("PARSING", "Stopped parser");
-        //Log.d("RES", result.toString());
-
         return result;
     }
 

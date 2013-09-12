@@ -49,7 +49,7 @@ public class LectureCursorAdapter extends CursorAdapter {
         String currentDate = newDate.format(date);
 
         if(currentDate.contains(newDate.format(new Date()))){
-            currentDate = "Today";
+            currentDate = context.getResources().getString(R.string.timetable_today);
         }
 
         if(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_NAME)) != null &&
@@ -80,20 +80,20 @@ public class LectureCursorAdapter extends CursorAdapter {
                 startTime = "0000";
                 endTime = "0000";
             }
-            SimpleDateFormat timef = new SimpleDateFormat("kkmm");
+            SimpleDateFormat timef = new SimpleDateFormat("HHmm");
             String currenttime = timef.format(new Date());
             long t = date.getTime();
-            String quartertime = timef.format(new Date(t-(15*60000)));
+            String quartertime = timef.format(new Date(t-(15*60*1000)));
             Log.d("TIME", ""+t);
             Log.d("TIME", quartertime);
 
             tvName.setText(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_NAME)));
-            tvRoom.setText("Room:\t\t"+cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ROOM)));
-            tvLecturer.setText("Lecturer:\t"+cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_LECTURER)));
+            tvRoom.setText(context.getResources().getString(R.string.timetable_room) + ":\t\t"+cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ROOM)));
+            tvLecturer.setText(context.getResources().getString(R.string.timetable_lecturer) + ":\t"+cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_LECTURER)));
             tvTime.setText(time);
             view.setBackgroundResource(R.drawable.list_item_background);
 
-            Boolean today = currentDate.contains("Today");
+            Boolean today = currentDate.contains(context.getResources().getString(R.string.timetable_today));
             if(today &&
                     Integer.parseInt(startTime) <= Integer.parseInt(currenttime) &&
                     Integer.parseInt(endTime) >= Integer.parseInt(currenttime)){

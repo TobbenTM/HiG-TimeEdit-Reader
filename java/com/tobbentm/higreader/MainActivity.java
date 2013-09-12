@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.tobbentm.higreader.db.DBHelper;
+import com.tobbentm.higreader.db.DSSettings;
 import com.tobbentm.higreader.db.DSSubscriptions;
 
 import java.sql.SQLException;
@@ -21,17 +22,18 @@ public class MainActivity extends Activity implements WelcomeFragment.readyToUpd
     TimeTableFragment timeTableFragment;
     private DBHelper dbhelper = new DBHelper(this);
     private DSSubscriptions subscriptionsDatasource;
+    //private DSSettings settingsDatasource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         subscriptionsDatasource = new DSSubscriptions(this);
-        //lecturesDatasource = new DSLectures(this);
+        //settingsDatasource = new DSSettings(this);
 
         try {
             subscriptionsDatasource.open();
-            //lecturesDatasource.open();
+            //settingsDatasource.open();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -49,7 +51,7 @@ public class MainActivity extends Activity implements WelcomeFragment.readyToUpd
     protected void onPause(){
         super.onPause();
         subscriptionsDatasource.close();
-        //lecturesDatasource.close();
+        //settingsDatasource.close();
     }
 
     @Override
@@ -57,6 +59,7 @@ public class MainActivity extends Activity implements WelcomeFragment.readyToUpd
         super.onResume();
         try {
             subscriptionsDatasource.open();
+            //settingsDatasource.open();
         } catch (SQLException e) {
             e.printStackTrace();
         }

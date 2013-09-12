@@ -66,8 +66,8 @@ public class AddSubFragment extends DialogFragment {
         spinner.setAdapter(adapter);
 
         builder.setView(view)
-                .setTitle("Add subscription")
-                .setNeutralButton("Search", new DialogInterface.OnClickListener() {
+                .setTitle(getResources().getString(R.string.add_title))
+                .setNeutralButton(getResources().getString(R.string.add_search_btn), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -128,7 +128,7 @@ public class AddSubFragment extends DialogFragment {
                     final String term = et.getText().toString();
 
                     //Send to network class
-                    Network.search(term, spinner.getSelectedItem().toString(), new AsyncHttpResponseHandler(){
+                    Network.search(term, spinner.getSelectedItem().toString(), getResources().getStringArray(R.array.search_array), new AsyncHttpResponseHandler(){
                         @Override
                         public void onSuccess(String response){
                             Log.d("DIALOG", "onSuccess starting");
@@ -174,7 +174,7 @@ public class AddSubFragment extends DialogFragment {
                         }
                         @Override
                         public void onFailure(Throwable e, String response){
-                            Toast.makeText(getActivity(), "Something went wrong!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), getResources().getString(R.string.add_net_failure), Toast.LENGTH_LONG).show();
                             Log.d("NET", e.toString());
                         }
                     });
@@ -183,7 +183,7 @@ public class AddSubFragment extends DialogFragment {
                         dismiss();
                 }else{
                     //If nothing is written in search field, this will show up
-                    Toast.makeText(getActivity(), "Please search for something sensible", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getResources().getString(R.string.add_field_empty), Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">HiG TimeEdit Reader</string>
+    <string name="app_language">no</string>
+
+    <string name="action_settings">Om</string>
+    <string name="action_subscriptions">Abonnementer</string>
+    <string name="action_update">Oppdater</string>
+
+    <string name="subs_add">Legg til</string>
+    <string name="subs_close_btn">Lukk</string>
+    <string name="subs_title">Abonnementer</string>
+    <string name="subs_unsubscribed">Fjernet abonnement: </string>
+    <string name="subs_content_desc">Fjern abonnement</string>
+
+    <string name="add_title">Legg til abonnement</string>
+    <string name="add_search_btn">Søk</string>
+    <string name="add_retry_btn">Prøv igjen</string>
+    <string name="add_search_hint">Klasse-/Fag-navn</string>
+    <string name="add_net_failure">Noe gikk galt!</string>
+    <string name="add_field_empty">Vennligst søk etter noe fornuftig</string>
+
+    <string name="welcome_text">Dette er en applikasjon jeg lagde som ett personlig verktøy. Om du skulle gå glipp av forelesninger på grunn av denne appen er det ikke mitt ansvar. Denne appen ligger også ute som åpen kildekode. Du kan finne pakkebrønnen her: www.github.com/tobbentm.\n\nFor å starte, søk etter klasse eller fag:</string>
+    <string name="welcome_nores_error">Ingen resultater, prøv igjen</string>
+    <string name="welcome_title">Velkommen!</string>
+    <string name="welcome_retry_btn">Prøv igjen</string>
+    <string name="welcome_search_btn">Søk</string>
+    <string name="welcome_search_hint">Klasse-/Fag-navn</string>
+    <string name="welcome_net_failure">Noe gikk galt!</string>
+    <string name="welcome_field_empty">Vennligst søk etter noe fornuftig</string>
+
+    <string name="timetable_today">I dag</string>
+    <string name="timetable_room">Rom</string>
+    <string name="timetable_lecturer">Foreleser</string>
+    <string name="timetable_update_error">Klarte ikke å oppdatere timeplan</string>
+
+    <string name="about_title">Om</string>
+    <string name="about_close_btn">Lukk</string>
+    <string name="about_main">Du kan finne meg på www.tobbentm.com\nKildebrønn finner du på www.github.com/tobbentm\n\nBiblioteker brukt:\nandroid-async-http\nhttp://loopj.com/android-async-http/</string>
+
+    <string-array name="search_array">
+        <item>Klasse</item>
+        <item>Fag</item>>
+    </string-array>
+
+</resources>

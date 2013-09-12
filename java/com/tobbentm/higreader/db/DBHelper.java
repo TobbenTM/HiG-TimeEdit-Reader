@@ -26,8 +26,10 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_VALUE = "value";
     public static final String COLUMN_EXCLUDED = "excluded";
 
+    public static final String SETTING_LASTUPDATED = "lastupdated";
+
     public static final String DATABASE_NAME = "higreader.db";
-    public static final int DATABASE_VERSION = 7;
+    public static final int DATABASE_VERSION = 8;
 
     public static final String DATABASE_CREATE_1 =
             "create table " + TABLE_SUBSCRIPTIONS + "("
@@ -53,6 +55,8 @@ public class DBHelper extends SQLiteOpenHelper {
             + COLUMN_VALUE + " text not null"
             + ");";
 
+    public static final String[] SETTINGS_VALUES = {SETTING_LASTUPDATED};
+
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -62,6 +66,10 @@ public class DBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(DATABASE_CREATE_1);
         sqLiteDatabase.execSQL(DATABASE_CREATE_2);
         sqLiteDatabase.execSQL(DATABASE_CREATE_3);
+        for(String setting : SETTINGS_VALUES){
+            sqLiteDatabase.execSQL("INSERT INTO " + TABLE_SETTINGS + "(" + COLUMN_SETTING
+            + ", " + COLUMN_VALUE + ") VALUES ('" + setting + "', '');");
+        }
     }
 
     @Override

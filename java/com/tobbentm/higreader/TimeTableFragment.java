@@ -17,9 +17,12 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.tobbentm.higreader.db.DBHelper;
 import com.tobbentm.higreader.db.DBSubscriptions;
 import com.tobbentm.higreader.db.DSLectures;
+import com.tobbentm.higreader.db.DSSettings;
 import com.tobbentm.higreader.db.DSSubscriptions;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,7 +33,9 @@ public class TimeTableFragment extends ListFragment {
     ProgressBar pb;
     DSLectures datasource;
     DSSubscriptions subscriptionsDatasource;
+    DSSettings settingsDatasource;
     DBHelper helper;
+    private Date date = new Date();
     private LectureCursorAdapter adapter;
 
     @Override
@@ -46,12 +51,14 @@ public class TimeTableFragment extends ListFragment {
         super.onActivityCreated(savedInstanceState);
         datasource = new DSLectures(getActivity());
         subscriptionsDatasource = new DSSubscriptions(getActivity());
+        settingsDatasource = new DSSettings(getActivity());
         helper = new DBHelper(getActivity());
 
         //Log.d("FRAG", "Opening datasources");
         try {
             datasource.open();
             subscriptionsDatasource.open();
+            settingsDatasource.open();
         } catch (SQLException e) {
             //Log.d("ERROR", "SQException in TimeTableFragment onActivityCreated");
             e.printStackTrace();
@@ -63,9 +70,7 @@ public class TimeTableFragment extends ListFragment {
         adapter = new LectureCursorAdapter(getActivity(), cursor, 0);
         setListAdapter(adapter);
 
-        if(subscriptionsDatasource.getSize() != 0){
-            updateLectures();
-        }
+        checkUpdate();
 
     }
 
@@ -79,7 +84,7 @@ public class TimeTableFragment extends ListFragment {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.action_update:
-                Toast.makeText(getActivity(), "Updating..", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "Updating..", Toast.LENGTH_SHORT).show();
                 updateLectures();
                 return true;
             default:
@@ -95,6 +100,7 @@ public class TimeTableFragment extends ListFragment {
     public void onPause(){
         super.onPause();
         datasource.close();
+        settingsDatasource.close();
         subscriptionsDatasource.close();
         adapter.notifyDataSetInvalidated();
         adapter.changeCursor(null);
@@ -106,6 +112,7 @@ public class TimeTableFragment extends ListFragment {
         try {
             datasource.open();
             subscriptionsDatasource.open();
+            settingsDatasource.open();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -115,7 +122,7 @@ public class TimeTableFragment extends ListFragment {
 
     public void updateLectures(){
         pb.setVisibility(View.VISIBLE);
-        pb.animate().translationY(10.0F).start();
+        pb.animate().translationY(5).start();
 
         String ids = "";
         List<DBSubscriptions> list = subscriptionsDatasource.getSubscriptions();
@@ -129,36 +136,54 @@ public class TimeTableFragment extends ListFragment {
         Network.timetable(ids, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(String response) {
-                String[][] result = TimeParser.timetable(response);
+                if(datasource.isOpen()){
+                    String[][] result = TimeParser.timetable(response);
 
-                //Log.d("TIMETABLE\t", Arrays.deepToString(result));
-
-                helper.truncate(helper.getWritableDatabase(), DBHelper.TABLE_LECTURES);
-                for(String[] arr : result){
-                    //Log.d("TIMETABLE\t", "Adding lecture:\t" + Arrays.toString(arr));
-                    datasource.addLecture(arr[2], arr[3], arr[4], arr[0], arr[1]);
-                }
-
-                adapter.changeCursor(datasource.getLecturesCursor());
-                adapter.notifyDataSetChanged();
-                pb.animate().translationY(-10.0F).withEndAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        pb.setVisibility(View.GONE);
+                    helper.truncate(helper.getWritableDatabase(), DBHelper.TABLE_LECTURES);
+                    for(String[] arr : result){
+                        datasource.addLecture(arr[2], arr[3], arr[4], arr[0], arr[1]);
                     }
-                });
+
+                    adapter.changeCursor(datasource.getLecturesCursor());
+                    adapter.notifyDataSetChanged();
+                    Long time = date.getTime();
+                    settingsDatasource.updateSetting(DBHelper.SETTING_LASTUPDATED, time.toString());
+                    pb.animate().translationY(-5).withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            pb.setVisibility(View.GONE);
+                        }
+                    });
+                }
             }
             @Override
             public void onFailure(Throwable e, String response){
-                pb.animate().translationY(-10.0F).withEndAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        pb.setVisibility(View.GONE);
-                    }
-                });
-                Toast.makeText(getActivity(), "Could not update timetable.", Toast.LENGTH_SHORT).show();
+                if(datasource.isOpen()){
+                    pb.animate().translationY(5).withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            pb.setVisibility(View.GONE);
+                            }
+                    });
+                    Toast.makeText(getActivity(), getResources().getString(R.string.timetable_update_error), Toast.LENGTH_SHORT).show();
+                }
             }
         });
+    }
+
+    private void checkUpdate(){
+        String lastupdated = settingsDatasource.getSetting(DBHelper.SETTING_LASTUPDATED);
+        Long time;
+        try{
+            time = Long.parseLong(lastupdated);
+        }catch (NumberFormatException e){
+            time = 0L;
+        }
+        if(subscriptionsDatasource.getSize() != 0){
+            if(settingsDatasource.getSize() != 0 && time < date.getTime() - (2*60*60*1000)){
+                updateLectures();
+            }
+        }
     }
 
 }
