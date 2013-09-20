@@ -131,6 +131,9 @@ public class TimeTableFragment extends ListFragment {
             ids += sub.getClassID();
             d++;
         }
+        ids += ",-1,1.182";
+            //Needed to get lecture name for some lectures.
+            //Don't know why. It just works (tm).
 
         Network.timetable(ids, new AsyncHttpResponseHandler() {
             @Override
