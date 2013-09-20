@@ -37,6 +37,7 @@
 
     <string name="about_title">Om</string>
     <string name="about_close_btn">Lukk</string>
+    <string name="about_version_append">Du kjører versjon:</string>
     <string name="about_main">Du kan finne meg på www.tobbentm.com\nKildebrønn finner du på www.github.com/tobbentm\n\nBiblioteker brukt:\nandroid-async-http\nhttp://loopj.com/android-async-http/</string>
 
     <string-array name="search_array">

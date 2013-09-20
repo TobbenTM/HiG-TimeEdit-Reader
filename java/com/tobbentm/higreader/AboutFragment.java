@@ -25,7 +25,8 @@ public class AboutFragment extends DialogFragment {
         TextView textV = (TextView) view.findViewById(R.id.about_text);
         String text = textV.getText().toString();
         try {
-            text += "\n\nYou are running version:\t" + getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionName;
+            text += "\n\n" + getActivity().getResources().getString(R.string.about_version_append) +
+                    "\t" + getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }

@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.tobbentm.higreader.db.DBHelper;
-import com.tobbentm.higreader.db.DSSettings;
 import com.tobbentm.higreader.db.DSSubscriptions;
 
 import java.sql.SQLException;

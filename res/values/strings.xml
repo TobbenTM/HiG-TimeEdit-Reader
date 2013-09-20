@@ -37,6 +37,7 @@
 
     <string name="about_title">About</string>
     <string name="about_close_btn">Close</string>
+    <string name="about_version_append">You are running version:</string>
     <string name="about_main">You can find me at www.tobbentm.com\nRepository for this app at www.github.com/tobbentm\n\nLibraries used:\nandroid-async-http\nhttp://loopj.com/android-async-http/</string>
 
     <string-array name="search_array">

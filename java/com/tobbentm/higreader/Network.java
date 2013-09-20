@@ -1,15 +1,10 @@
 package com.tobbentm.higreader;
 
-import android.util.Log;
-
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.tobbentm.higreader.db.DSSubscriptions;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by Tobias on 26.08.13.

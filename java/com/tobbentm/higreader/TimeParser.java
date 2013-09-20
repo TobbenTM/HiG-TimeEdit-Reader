@@ -1,13 +1,7 @@
 package com.tobbentm.higreader;
 
-import android.util.Log;
-
-import java.lang.String;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by Tobias on 26.08.13.
@@ -25,10 +19,6 @@ public class TimeParser {
         ArrayList<ArrayList<String>> master = new ArrayList<ArrayList<String>>();
 
         String currentdate = "";
-
-        //Log.d("PARSER", split1.length + "");
-        //Log.d("PARSER", "" + split2.toString());
-        //Log.d("PARSER, split2.len: ", "" + split2.length);
 
         for(int i = 1; i < split2.length -1; i++){
             currentdate = split2[i].split("</td>")[0].replaceAll(" Today", "");

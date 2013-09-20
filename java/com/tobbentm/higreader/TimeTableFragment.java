@@ -21,7 +21,6 @@ import com.tobbentm.higreader.db.DSSettings;
 import com.tobbentm.higreader.db.DSSubscriptions;
 
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -128,7 +127,7 @@ public class TimeTableFragment extends ListFragment {
         List<DBSubscriptions> list = subscriptionsDatasource.getSubscriptions();
         int d = 0;
         for (DBSubscriptions sub : list){
-            if(d>0) ids += ",";
+            if(d>0) ids += ",-1,";
             ids += sub.getClassID();
             d++;
         }
@@ -137,23 +136,28 @@ public class TimeTableFragment extends ListFragment {
             @Override
             public void onSuccess(String response) {
                 if(datasource.isOpen()){
-                    String[][] result = TimeParser.timetable(response);
+                    if(response != null && response.length() > 0){
+                        String[][] result = TimeParser.timetable(response);
 
-                    helper.truncate(helper.getWritableDatabase(), DBHelper.TABLE_LECTURES);
-                    for(String[] arr : result){
-                        datasource.addLecture(arr[2], arr[3], arr[4], arr[0], arr[1]);
-                    }
-
-                    adapter.changeCursor(datasource.getLecturesCursor());
-                    adapter.notifyDataSetChanged();
-                    Long time = date.getTime();
-                    settingsDatasource.updateSetting(DBHelper.SETTING_LASTUPDATED, time.toString());
-                    pb.animate().translationY(-5).withEndAction(new Runnable() {
-                        @Override
-                        public void run() {
-                            pb.setVisibility(View.GONE);
+                        helper.truncate(helper.getWritableDatabase(), DBHelper.TABLE_LECTURES);
+                        for(String[] arr : result){
+                            datasource.addLecture(arr[2], arr[3], arr[4], arr[0], arr[1]);
                         }
-                    });
+
+                        adapter.changeCursor(datasource.getLecturesCursor());
+                        adapter.notifyDataSetChanged();
+                        Long time = date.getTime();
+                        settingsDatasource.updateSetting(DBHelper.SETTING_LASTUPDATED, time.toString());
+                        pb.animate().translationY(-5).withEndAction(new Runnable() {
+                            @Override
+                            public void run() {
+                                pb.setVisibility(View.GONE);
+                            }
+                        });
+                    }else{
+                        Toast.makeText(getActivity(), getResources().getString(R.string.timetable_update_error), Toast.LENGTH_SHORT).show();
+                        onFailure(null, null);
+                    }
                 }
             }
             @Override
