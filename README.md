@@ -17,12 +17,12 @@ See LICENSE file
 
 ##TODO:
 
+* Add room/lecturer view (separate from timetable)
 * Colorize listviews either per subscription or per course
 * Implement swipe to unsubscribe from individual courses
 * Implement pull to refresh on timetable listview
 * Hide lectures that are older than today (Might not be needed with autoupdate)
 * Update timetable after user removes a subscription 
-* Adjust progressbar in timetable
 * Parse, save and show if a lecture has been changed in the last 4 days (html tag)
 * Remove progressbar in timetable, and instead add it to actionbar(?)
 * Comment all the code

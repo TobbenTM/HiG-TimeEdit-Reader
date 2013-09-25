@@ -108,6 +108,9 @@ public class MainActivity extends Activity implements WelcomeFragment.readyToUpd
             case R.id.action_settings:
                 showAboutDialog();
                 return true;
+            case R.id.action_search:
+                //TODO: Show search dialog
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

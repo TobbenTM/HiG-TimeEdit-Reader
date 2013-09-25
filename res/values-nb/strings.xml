@@ -7,6 +7,7 @@
     <string name="action_settings">Om</string>
     <string name="action_subscriptions">Abonnementer</string>
     <string name="action_update">Oppdater</string>
+    <string name="action_search">Søk</string>
 
     <string name="subs_add">Legg til</string>
     <string name="subs_close_btn">Lukk</string>

@@ -7,6 +7,7 @@
     <string name="action_settings">About</string>
     <string name="action_subscriptions">Subscriptions</string>
     <string name="action_update">Update</string>
+    <string name="action_search">Search</string>
 
     <string name="subs_add">Add</string>
     <string name="subs_close_btn">Close</string>

@@ -16,4 +16,8 @@
         
     </style>
 
+    <style name="TimeTableList" parent="android:Widget.Holo.ListView">
+        <item name="android:listSelector">@android:color/transparent</item>
+    </style>
+
 </resources>

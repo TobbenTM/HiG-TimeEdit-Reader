@@ -121,7 +121,7 @@ public class TimeTableFragment extends ListFragment {
 
     public void updateLectures(){
         pb.setVisibility(View.VISIBLE);
-        pb.animate().translationY(5).start();
+        pb.animate().translationY(1).start();
 
         String ids = "";
         List<DBSubscriptions> list = subscriptionsDatasource.getSubscriptions();
@@ -151,7 +151,7 @@ public class TimeTableFragment extends ListFragment {
                         adapter.notifyDataSetChanged();
                         Long time = date.getTime();
                         settingsDatasource.updateSetting(DBHelper.SETTING_LASTUPDATED, time.toString());
-                        pb.animate().translationY(-5).withEndAction(new Runnable() {
+                        pb.animate().translationY(-1).withEndAction(new Runnable() {
                             @Override
                             public void run() {
                                 pb.setVisibility(View.GONE);
@@ -166,7 +166,7 @@ public class TimeTableFragment extends ListFragment {
             @Override
             public void onFailure(Throwable e, String response){
                 if(datasource.isOpen()){
-                    pb.animate().translationY(5).withEndAction(new Runnable() {
+                    pb.animate().translationY(1).withEndAction(new Runnable() {
                         @Override
                         public void run() {
                             pb.setVisibility(View.GONE);
