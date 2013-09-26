@@ -36,6 +36,11 @@
     <string name="timetable_lecturer">Lecturer</string>
     <string name="timetable_update_error">Could not update timetable.</string>
 
+    <string name="sa_title">View timetable</string>
+    <string name="sa_search_btn">Search</string>
+    <string name="sa_search_hint">Room/Lecturer name</string>
+    <string name="sa_retry_btn">Retry</string>
+
     <string name="about_title">About</string>
     <string name="about_close_btn">Close</string>
     <string name="about_version_append">You are running version:</string>
@@ -43,7 +48,14 @@
 
     <string-array name="search_array">
         <item>Class</item>
-        <item>Course</item>>
+        <item>Course</item>
+    </string-array>
+
+    <string-array name="sa_search_array">
+        <item>Class</item>
+        <item>Course</item>
+        <item>Lecturer</item>
+        <item>Room</item>
     </string-array>
 
 </resources>

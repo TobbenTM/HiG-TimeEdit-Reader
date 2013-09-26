@@ -13,11 +13,15 @@ import com.tobbentm.higreader.db.DSSubscriptions;
 
 import java.sql.SQLException;
 
-public class MainActivity extends Activity implements WelcomeFragment.readyToUpdateListener, AddSubFragment.readyToUpdateListener {
+public class MainActivity extends Activity implements
+        WelcomeFragment.readyToUpdateListener,
+        AddSubFragment.readyToUpdateListener,
+        SearchAdvFragment.openTimeTableListener {
 
     FragmentManager fm = getFragmentManager();
     SubscriptionsFragment subsFragment;
     AddSubFragment addFragment;
+    SearchAdvFragment saFragment;
     TimeTableFragment timeTableFragment;
     private DBHelper dbhelper = new DBHelper(this);
     private DSSubscriptions subscriptionsDatasource;
@@ -92,6 +96,11 @@ public class MainActivity extends Activity implements WelcomeFragment.readyToUpd
         aboutFragment.show(fm, "fragment_about");
     }
 
+    private void showSearchAdvDialog(){
+        saFragment = new SearchAdvFragment();
+        saFragment.show(fm, "fragment_search_adv");
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -134,6 +143,10 @@ public class MainActivity extends Activity implements WelcomeFragment.readyToUpd
         addFragment.getDialog().dismiss();
     }
 
+    public void saclose(View view){
+        saFragment.getDialog().dismiss();
+    }
+
     public void subAdd(View view){
         subsFragment.getDialog().dismiss();
         showAddDialog();
@@ -142,6 +155,11 @@ public class MainActivity extends Activity implements WelcomeFragment.readyToUpd
     @Override
     public void readyToUpdate() {
         timeTableFragment.updateLectures();
+    }
+
+    @Override
+    public void openTimeTable(String name, String ttid) {
+        
     }
 
     /*

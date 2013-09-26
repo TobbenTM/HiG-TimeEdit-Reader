@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="@string/welcome_nores_error"
+        android:id="@+id/sa_error_text"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"
+        android:paddingTop="20dp" />
+
+    <Button
+        android:id="@+id/sa_nores_button"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="10dp"
+        android:text="@string/sa_retry_btn"
+        android:visibility="gone"
+        android:onClick="saclose" />
+
+    <Spinner
+        android:id="@+id/sa_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/sa_edittext"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:singleLine="true"
+        android:hint="@string/sa_search_hint"
+        android:imeOptions="actionDone" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sa_progressBar"
+        android:visibility="gone"
+        android:layout_gravity="center_horizontal"/>
+
+    <ListView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/sa_result_list"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+</LinearLayout>

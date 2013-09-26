@@ -32,9 +32,13 @@ public class Network {
     public static void search(String term, String type, String[] searchArray, AsyncHttpResponseHandler handler){
         final int iType;
         if(type.contains(searchArray[0])){
-            iType = 182;
+            iType = 182;    // Class
         }else if(type.contains(searchArray[1])){
-            iType = 183;
+            iType = 183;    // Course
+        }else if(searchArray.length > 2 && type.contains(searchArray[2])){
+            iType = 184;    // Lecturer
+        }else if(searchArray.length > 2 && type.contains(searchArray[3])){
+            iType = 185;    // Room
         }else{
             iType = 0;
         }
