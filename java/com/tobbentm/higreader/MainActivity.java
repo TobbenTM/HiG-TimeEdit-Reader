@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.tobbentm.higreader.db.DBHelper;
+import com.tobbentm.higreader.db.DSRecent;
 import com.tobbentm.higreader.db.DSSubscriptions;
 
 import java.sql.SQLException;
@@ -23,8 +25,10 @@ public class MainActivity extends Activity implements
     AddSubFragment addFragment;
     SearchAdvFragment saFragment;
     TimeTableFragment timeTableFragment;
+    ViewFragment viewFragment;
     private DBHelper dbhelper = new DBHelper(this);
     private DSSubscriptions subscriptionsDatasource;
+    private DSRecent recentDatasource;
     //private DSSettings settingsDatasource;
 
     @Override
@@ -32,14 +36,21 @@ public class MainActivity extends Activity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         subscriptionsDatasource = new DSSubscriptions(this);
+        recentDatasource = new DSRecent(this);
         //settingsDatasource = new DSSettings(this);
 
         try {
             subscriptionsDatasource.open();
+            recentDatasource.open();
             //settingsDatasource.open();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        if(recentDatasource.getSize() > 10)
+            recentDatasource.trimDB();
+
+        recentDatasource.close();
 
         if(subscriptionsDatasource.getSize() == 0){
             dbTruncate();
@@ -62,7 +73,6 @@ public class MainActivity extends Activity implements
         super.onResume();
         try {
             subscriptionsDatasource.open();
-            //settingsDatasource.open();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -73,6 +83,15 @@ public class MainActivity extends Activity implements
         timeTableFragment = new TimeTableFragment();
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.activity_frame, timeTableFragment, "fragment_timetable");
+        ft.commit();
+    }
+
+    private void showViewFragment(String name, String id){
+        viewFragment = new ViewFragment(name, id);
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out, android.R.animator.fade_in, android.R.animator.fade_out);
+        ft.replace(R.id.activity_frame, viewFragment, "fragment_view");
+        ft.addToBackStack("fragment_view");
         ft.commit();
     }
 
@@ -111,14 +130,17 @@ public class MainActivity extends Activity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
-            case R.id.action_addsearch:
+            case android.R.id.home:
+                fm.popBackStack(null, fm.POP_BACK_STACK_INCLUSIVE);
+                return true;
+            case R.id.action_subs:
                 showSubsDialog();
                 return true;
-            case R.id.action_settings:
+            case R.id.action_about:
                 showAboutDialog();
                 return true;
             case R.id.action_search:
-                //TODO: Show search dialog
+                showSearchAdvDialog();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -126,11 +148,6 @@ public class MainActivity extends Activity implements
     }
 
     private void dbTruncate(){
-        /*try {
-            backupDatabase();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
         //dbhelper.truncate(dbhelper.getWritableDatabase(), DBHelper.TABLE_SUBSCRIPTIONS);
         dbhelper.truncate(dbhelper.getWritableDatabase(), DBHelper.TABLE_LECTURES);
     }
@@ -159,31 +176,7 @@ public class MainActivity extends Activity implements
 
     @Override
     public void openTimeTable(String name, String ttid) {
-        
+        showViewFragment(name, ttid);
     }
 
-    /*
-    Yay for commented code!!
-
-    public static void backupDatabase() throws IOException {
-        //Open your local db as the input stream
-        String inFileName = "/data/data/com.tobbentm.higreader/databases/higreader.db";
-        File dbFile = new File(inFileName);
-        FileInputStream fis = new FileInputStream(dbFile);
-
-        String outFileName = Environment.getExternalStorageDirectory()
-                + "/database.sqlite";
-        //Open the empty db as the output stream
-        OutputStream output = new FileOutputStream(outFileName);
-        //transfer bytes from the inputfile to the outputfile
-        byte[] buffer = new byte[1024];
-        int length;
-        while ((length = fis.read(buffer))>0){
-            output.write(buffer, 0, length);
-        }
-        //Close the streams
-        output.flush();
-        output.close();
-        fis.close();
-    }*/
 }

@@ -1,5 +1,6 @@
 package com.tobbentm.higreader;
 
+import android.app.ActionBar;
 import android.app.ListFragment;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -52,6 +53,11 @@ public class TimeTableFragment extends ListFragment {
         subscriptionsDatasource = new DSSubscriptions(getActivity());
         settingsDatasource = new DSSettings(getActivity());
         helper = new DBHelper(getActivity());
+
+        ActionBar ab = getActivity().getActionBar();
+        ab.setTitle(getActivity().getResources().getString(R.string.timetable_title));
+        ab.setDisplayHomeAsUpEnabled(false);
+        ab.setHomeButtonEnabled(false);
 
         //Log.d("FRAG", "Opening datasources");
         try {
@@ -165,7 +171,7 @@ public class TimeTableFragment extends ListFragment {
             }
             @Override
             public void onFailure(Throwable e, String response){
-                if(datasource.isOpen()){
+                if(isAdded() && datasource.isOpen()){
                     pb.animate().translationY(1).withEndAction(new Runnable() {
                         @Override
                         public void run() {

@@ -32,9 +32,17 @@
     <string name="welcome_field_empty">Vennligst søk etter noe fornuftig</string>
 
     <string name="timetable_today">I dag</string>
+    <string name="timetable_title">Timeplan</string>
     <string name="timetable_room">Rom</string>
     <string name="timetable_lecturer">Foreleser</string>
     <string name="timetable_update_error">Klarte ikke å oppdatere timeplan</string>
+
+    <string name="sa_title">Se timeplan</string>
+    <string name="sa_search_btn">Søk</string>
+    <string name="sa_search_hint">Søk</string>
+    <string name="sa_retry_btn">Prøv igjen</string>
+    <string name="sa_recent_title">Nylig valgt:</string>
+    <string name="sa_info_text">I denne visningen kan du se timeplaner for klasser, fag, rom eller forelesere. Disse vil ikke bli lagt til som abonnement.</string>
 
     <string name="about_title">Om</string>
     <string name="about_close_btn">Lukk</string>
@@ -44,6 +52,13 @@
     <string-array name="search_array">
         <item>Klasse</item>
         <item>Fag</item>>
+    </string-array>
+
+    <string-array name="sa_search_array">
+        <item>Klasse</item>
+        <item>Fag</item>
+        <item>Foreleser</item>
+        <item>Rom</item>
     </string-array>
 
 </resources>

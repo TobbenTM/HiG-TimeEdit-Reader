@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -19,12 +20,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.tobbentm.higreader.db.DSSubscriptions;
+import com.tobbentm.higreader.db.DBHelper;
+import com.tobbentm.higreader.db.DSRecent;
 
 import java.sql.SQLException;
 
@@ -34,6 +37,9 @@ import java.sql.SQLException;
 public class SearchAdvFragment extends DialogFragment {
 
     private openTimeTableListener listener;
+    private DSRecent datasource;
+    private SimpleCursorAdapter adapter;
+    private Boolean recent = false;
 
     public SearchAdvFragment(){}
 
@@ -49,6 +55,16 @@ public class SearchAdvFragment extends DialogFragment {
         }catch (ClassCastException e){
             throw  new ClassCastException(activity.toString());
         }
+        datasource = new DSRecent(getActivity());
+        try {
+            datasource.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if(datasource.getSize() > 0)
+            recent = true;
+
     }
 
     @Override
@@ -77,23 +93,91 @@ public class SearchAdvFragment extends DialogFragment {
     }
 
     @Override
+    public void onPause(){
+        super.onPause();
+        datasource.close();
+        if(recent){
+            adapter.notifyDataSetInvalidated();
+            adapter.changeCursor(null);
+        }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        try {
+            datasource.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if(recent){
+            adapter.changeCursor(datasource.getRecentCursor());
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog){
+        super.onDismiss(dialog);
+        datasource.close();
+    }
+
+    @Override
     public void onStart(){
         super.onStart();
         AlertDialog dialog = (AlertDialog)getDialog();
 
         final EditText et = (EditText)dialog.findViewById(R.id.sa_edittext);
         final Spinner spinner = (Spinner)dialog.findViewById(R.id.sa_spinner);
+        final ListView recentList = (ListView)dialog.findViewById(R.id.sa_recent_list);
         final ProgressBar pb = (ProgressBar)dialog.findViewById(R.id.sa_progressBar);
         final ListView lv = (ListView)dialog.findViewById(R.id.sa_result_list);
         final TextView aerror = (TextView)dialog.findViewById(R.id.sa_error_text);
         final Button abutton = (Button)dialog.findViewById(R.id.sa_nores_button);
+        final TextView infotv = (TextView) dialog.findViewById(R.id.sa_info_text);
+        final Button neutButton = dialog.getButton(Dialog.BUTTON_NEUTRAL);
+        final TextView recenttv = (TextView)dialog.findViewById(R.id.sa_recent_title);
+        final View div1 = dialog.findViewById(R.id.sa_v1);
+        final View div2 = dialog.findViewById(R.id.sa_v2);
 
-        final Button neutButton = (Button) dialog.getButton(Dialog.BUTTON_NEUTRAL);
+        if(!datasource.isOpen()){
+            try {
+                datasource.open();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        final Cursor cursor = datasource.getRecentCursor();
+        final Cursor listCursor = datasource.getRecentCursor();
+
+        if(recent){
+            recentList.setVisibility(View.VISIBLE);
+            recenttv.setVisibility(View.VISIBLE);
+            div1.setVisibility(View.VISIBLE);
+            div2.setVisibility(View.VISIBLE);
+            String[] col = {DBHelper.COLUMN_NAME};
+            int[] bind = {android.R.id.text1};
+            adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, listCursor, col, bind, 0);
+            recentList.setAdapter(adapter);
+        }
+
+        recentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                cursor.moveToPosition(i);
+                datasource.addRecent(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_CLASS_ID)),
+                        cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_NAME)));
+                listener.openTimeTable(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_NAME)),
+                        cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_CLASS_ID)));
+                dismiss();
+            }
+        });
 
         et.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if(i == EditorInfo.IME_ACTION_DONE){
+                if (i == EditorInfo.IME_ACTION_DONE) {
                     neutButton.performClick();
                     return true;
                 }
@@ -120,6 +204,11 @@ public class SearchAdvFragment extends DialogFragment {
                     //Hide old shit, show progressbar, disable search button
                     spinner.setVisibility(View.GONE);
                     et.setVisibility(View.GONE);
+                    infotv.setVisibility(View.GONE);
+                    recentList.setVisibility(View.GONE);
+                    recenttv.setVisibility(View.GONE);
+                    div1.setVisibility(View.GONE);
+                    div2.setVisibility(View.GONE);
                     pb.setVisibility(View.VISIBLE);
                     neutButton.setEnabled(false);
 
@@ -127,7 +216,7 @@ public class SearchAdvFragment extends DialogFragment {
                     final String term = et.getText().toString();
 
                     //Send to network class
-                    Network.search(term, spinner.getSelectedItem().toString(), getResources().getStringArray(R.array.search_array), new AsyncHttpResponseHandler(){
+                    Network.search(term, spinner.getSelectedItem().toString(), getResources().getStringArray(R.array.sa_search_array), new AsyncHttpResponseHandler(){
                         @Override
                         public void onSuccess(String response){
                             Log.d("DIALOG", "onSuccess starting");
@@ -152,7 +241,8 @@ public class SearchAdvFragment extends DialogFragment {
                             lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    listener.openTimeTable(results[position][0], results[position][1]);
+                                    datasource.addRecent(results[position][0], results[position][1]);
+                                    listener.openTimeTable(results[position][1], results[position][0]);
                                     dismiss();
                                 }
                             });
@@ -178,6 +268,7 @@ public class SearchAdvFragment extends DialogFragment {
                 }
             }
         });
+
 
     }
 

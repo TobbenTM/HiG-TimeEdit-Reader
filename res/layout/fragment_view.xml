@@ -4,4 +4,19 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ProgressBar
+        android:layout_gravity="center_horizontal|center_vertical"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:translationY="-100dp"
+        android:id="@+id/timetable_view_pb"
+        android:visibility="gone"/>
+
+    <ListView style="@style/TimeTableList"
+        android:id="@id/android:list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="visible" />
+
 </LinearLayout>

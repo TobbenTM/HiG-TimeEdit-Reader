@@ -11,8 +11,10 @@ import android.util.Log;
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_LECTURES = "lectures";
+    public static final String TABLE_TEMP_LECTURES = "templectures";
     public static final String TABLE_SUBSCRIPTIONS = "subscriptions";
     public static final String TABLE_SETTINGS = "settings";
+    public static final String TABLE_RECENT = "recent";
 
     public static final String COLUMN_DB_ID = "_id";
     public static final String COLUMN_LECTURE_ID = "lectureid";
@@ -29,7 +31,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String SETTING_LASTUPDATED = "lastupdated";
 
     public static final String DATABASE_NAME = "higreader.db";
-    public static final int DATABASE_VERSION = 8;
+    public static final int DATABASE_VERSION = 9;
 
     public static final String DATABASE_CREATE_1 =
             "create table " + TABLE_SUBSCRIPTIONS + "("
@@ -54,6 +56,22 @@ public class DBHelper extends SQLiteOpenHelper {
             + COLUMN_SETTING + " text not null, "
             + COLUMN_VALUE + " text not null"
             + ");";
+    public static final String DATABASE_CREATE_4 =
+            "create table " + TABLE_TEMP_LECTURES + "("
+            + COLUMN_DB_ID + " integer primary key autoincrement, "
+            + COLUMN_LECTURE_ID + " text, "
+            + COLUMN_NAME + " text not null, "
+            + COLUMN_ROOM + " text, "
+            + COLUMN_LECTURER + " text, "
+            + COLUMN_DATE + " text not null, "
+            + COLUMN_TIME + " text not null"
+            + "); ";
+    public static final String DATABASE_CREATE_5 =
+            "create table " + TABLE_RECENT + "("
+            + COLUMN_DB_ID + " integer primary key autoincrement, "
+            + COLUMN_CLASS_ID + " text not null, "
+            + COLUMN_NAME + " text"
+            + "); ";
 
     public static final String[] SETTINGS_VALUES = {SETTING_LASTUPDATED};
 
@@ -66,6 +84,8 @@ public class DBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(DATABASE_CREATE_1);
         sqLiteDatabase.execSQL(DATABASE_CREATE_2);
         sqLiteDatabase.execSQL(DATABASE_CREATE_3);
+        sqLiteDatabase.execSQL(DATABASE_CREATE_4);
+        sqLiteDatabase.execSQL(DATABASE_CREATE_5);
         createSettings(sqLiteDatabase);
     }
 
@@ -76,12 +96,10 @@ public class DBHelper extends SQLiteOpenHelper {
         switch (oldV){
             case 7:
                 createSettings(sqLiteDatabase);
+            case 8:
+                sqLiteDatabase.execSQL(DATABASE_CREATE_4);
+                sqLiteDatabase.execSQL(DATABASE_CREATE_5);
         }
-
-        //sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_LECTURES + ";");
-        //sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_SETTINGS + ";");
-        //sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_SUBSCRIPTIONS + ";");
-        //onCreate(sqLiteDatabase);
     }
 
     public void truncate(SQLiteDatabase sqLiteDatabase, String table){
@@ -94,6 +112,4 @@ public class DBHelper extends SQLiteOpenHelper {
                     + ", " + COLUMN_VALUE + ") VALUES ('" + setting + "', '');");
         }
     }
-
-
 }

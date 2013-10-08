@@ -17,7 +17,6 @@ See LICENSE file
 
 ##TODO:
 
-* Add room/lecturer view (separate from timetable)
 * Colorize listviews either per subscription or per course
 * Implement swipe to unsubscribe from individual courses
 * Implement pull to refresh on timetable listview
@@ -26,6 +25,7 @@ See LICENSE file
 * Parse, save and show if a lecture has been changed in the last 4 days (html tag)
 * Remove progressbar in timetable, and instead add it to actionbar(?)
 * Comment all the code
+* ~~Add room/lecturer view (separate from timetable)~~
 * ~~Create new icon~~
 * ~~Autoupdate at intervals and after initial welcome dialog~~
 * ~~Remove unneeded permissions (Storage R/W)~~
@@ -35,6 +35,7 @@ See LICENSE file
 ##Known bugs:
 
 * Somewhat slow when closing the app, might need some optimizing
+* ~~Would crash when network failed after closing app~~
 * ~~Unable to get correct timetable when subscribing to class AND course~~
 * ~~ANR when updating, then immediately switching network mode (from mobile to wifi for examle)~~
 * ~~Samsung Note unable to properly parse date, causing app to display all dates as "Today"~~

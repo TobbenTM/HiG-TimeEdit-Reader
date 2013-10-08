@@ -1,5 +1,7 @@
 package com.tobbentm.higreader;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,14 +56,16 @@ public class TimeParser {
 
         //Gather valuable data into the two arrays
         for (String s : parsed){
-            if(s.contains(".182") || s.contains(".183")){
+            if(s.contains(".182") || s.contains(".183") || s.contains(".184") || s.contains(".185")){
                 id.add(s);
-            }else if(s.startsWith(term.toUpperCase()) && !s.contains(">")){
+            }else if(s.toUpperCase().contains(term.toUpperCase()) && !s.contains(">")){
                 name.add(s);
             }
         }
 
         String[][] result = new String[id.size()][2];
+
+        Log.d("HIG.SEARCH.ARRAY", name.toString() + id.toString());
 
         //Join the two arrays into one 2D array
         for(int i=0; i < id.size(); i++){
