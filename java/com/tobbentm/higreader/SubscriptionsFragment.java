@@ -1,5 +1,6 @@
 package com.tobbentm.higreader;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -7,6 +8,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -21,7 +23,32 @@ import java.sql.SQLException;
  * Created by Tobias on 31.08.13.
  */
 public class SubscriptionsFragment extends DialogFragment {
+
+    private readyToUpdateListener listener;
+    private boolean update = false;
+
     public SubscriptionsFragment(){}
+
+    public interface readyToUpdateListener{
+        public void readyToUpdate();
+    }
+
+    @Override
+     public void onAttach(Activity activity){
+        super.onAttach(activity);
+        try{
+            listener = (readyToUpdateListener) activity;
+        }catch (ClassCastException e){
+            throw new ClassCastException(activity.toString());
+        }
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog){
+        if(update)
+            listener.readyToUpdate();
+        super.onDismiss(dialog);
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -56,8 +83,16 @@ public class SubscriptionsFragment extends DialogFragment {
             e.printStackTrace();
         }
 
-        SubsCursorAdapter adapter = new SubsCursorAdapter(getActivity(), datasource.getCursor(), 0);
+        final SubsCursorAdapter adapter = new SubsCursorAdapter(getActivity(), datasource.getCursor(), 0);
         list.setAdapter(adapter);
         datasource.close();
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if(adapter.update())
+                    update = true;
+            }
+        });
     }
 }

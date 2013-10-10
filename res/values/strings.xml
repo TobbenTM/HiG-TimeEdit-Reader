@@ -42,6 +42,7 @@
     <string name="sa_search_hint">Search</string>
     <string name="sa_retry_btn">Retry</string>
     <string name="sa_recent_title">Recent:</string>
+    <string name="sa_recent_btn">Clear history</string>
     <string name="sa_info_text">In this view you may search for room, lecturer, class or course. These will not be added to your subscriptions.</string>
 
     <string name="about_title">About</string>

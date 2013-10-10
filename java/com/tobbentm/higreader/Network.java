@@ -47,8 +47,8 @@ public class Network {
         }
 
         final String baseURL = "https://web.timeedit.se/hig_no/db1/timeedit/p/open/objects.html?max=15&partajax=t&l=en&types=" + iType + "&search_text=";
-        Log.d("HIG.SEARCH", "URL: " + baseURL + term);
-        client.get(baseURL + term, handler);
+        Log.d("HIG.SEARCH", "URL: " + baseURL + term.replaceAll(" ", "%20"));
+        client.get(baseURL + term.replaceAll(" ", "%20"), handler);
     }
 
     public static void search(String term, String type, AsyncHttpResponseHandler handler){

@@ -22,6 +22,7 @@ public class SubsCursorAdapter extends CursorAdapter {
 
     private LayoutInflater inflater;
     private Context act;
+    private boolean updated = false;
 
     public SubsCursorAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
@@ -65,5 +66,10 @@ public class SubsCursorAdapter extends CursorAdapter {
         this.changeCursor(ds.getCursor());
         ds.close();
         this.notifyDataSetChanged();
+        updated = true;
+    }
+
+    public boolean update(){
+        return updated;
     }
 }

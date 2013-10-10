@@ -18,6 +18,7 @@ import java.sql.SQLException;
 public class MainActivity extends Activity implements
         WelcomeFragment.readyToUpdateListener,
         AddSubFragment.readyToUpdateListener,
+        SubscriptionsFragment.readyToUpdateListener,
         SearchAdvFragment.openTimeTableListener {
 
     FragmentManager fm = getFragmentManager();
@@ -28,7 +29,7 @@ public class MainActivity extends Activity implements
     ViewFragment viewFragment;
     private DBHelper dbhelper = new DBHelper(this);
     private DSSubscriptions subscriptionsDatasource;
-    private DSRecent recentDatasource;
+    //private DSRecent recentDatasource;
     //private DSSettings settingsDatasource;
 
     @Override
@@ -36,21 +37,21 @@ public class MainActivity extends Activity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         subscriptionsDatasource = new DSSubscriptions(this);
-        recentDatasource = new DSRecent(this);
+        //recentDatasource = new DSRecent(this);
         //settingsDatasource = new DSSettings(this);
 
         try {
             subscriptionsDatasource.open();
-            recentDatasource.open();
+            //recentDatasource.open();
             //settingsDatasource.open();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        if(recentDatasource.getSize() > 10)
-            recentDatasource.trimDB();
+        //if(recentDatasource.getSize() > 10)
+        //    recentDatasource.trimDB();
 
-        recentDatasource.close();
+        //recentDatasource.close();
 
         if(subscriptionsDatasource.getSize() == 0){
             dbTruncate();

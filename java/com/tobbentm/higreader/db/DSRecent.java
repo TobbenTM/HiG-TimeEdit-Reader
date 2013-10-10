@@ -52,4 +52,8 @@ public class DSRecent {
         database.rawQuery("DELETE FROM recent WHERE id NOT IN ( SELECT id FROM recent ORDER BY id DESC LIMIT 4 )", null);
     }
 
+    public void truncate(){
+        database.execSQL("DELETE FROM recent");
+    }
+
 }

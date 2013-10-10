@@ -113,4 +113,15 @@ public class TimeParser {
         return arr;
     }
 
+    private static ArrayList<String> clearEntry(String date, String time){
+        ArrayList<String> arr = new ArrayList<String>();
+        arr.add(date);
+        arr.add(time);
+        arr.add("HIGREADER.clear");
+        arr.add("");
+        arr.add("");
+        arr.add("");
+        return arr;
+    }
+
 }

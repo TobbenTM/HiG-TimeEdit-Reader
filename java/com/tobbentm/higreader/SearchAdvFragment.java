@@ -18,6 +18,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleCursorAdapter;
@@ -136,9 +138,8 @@ public class SearchAdvFragment extends DialogFragment {
         final Button abutton = (Button)dialog.findViewById(R.id.sa_nores_button);
         final TextView infotv = (TextView) dialog.findViewById(R.id.sa_info_text);
         final Button neutButton = dialog.getButton(Dialog.BUTTON_NEUTRAL);
-        final TextView recenttv = (TextView)dialog.findViewById(R.id.sa_recent_title);
-        final View div1 = dialog.findViewById(R.id.sa_v1);
-        final View div2 = dialog.findViewById(R.id.sa_v2);
+        final ImageButton clearbtn = (ImageButton)dialog.findViewById(R.id.sa_recent_btn);
+        final LinearLayout recentcontainer = (LinearLayout)dialog.findViewById(R.id.sa_recent_title_container);
 
         if(!datasource.isOpen()){
             try {
@@ -153,14 +154,37 @@ public class SearchAdvFragment extends DialogFragment {
 
         if(recent){
             recentList.setVisibility(View.VISIBLE);
-            recenttv.setVisibility(View.VISIBLE);
-            div1.setVisibility(View.VISIBLE);
-            div2.setVisibility(View.VISIBLE);
+            recentcontainer.setVisibility(View.VISIBLE);
             String[] col = {DBHelper.COLUMN_NAME};
             int[] bind = {android.R.id.text1};
             adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, listCursor, col, bind, 0);
             recentList.setAdapter(adapter);
         }
+
+        clearbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!datasource.isOpen()){
+                    try {
+                        datasource.open();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                adapter.notifyDataSetInvalidated();
+                datasource.truncate();
+                recentList.setVisibility(View.GONE);
+                recentcontainer.setVisibility(View.GONE);
+            }
+        });
+
+        clearbtn.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Toast.makeText(getActivity(), clearbtn.getContentDescription(), Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
 
         recentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -206,9 +230,7 @@ public class SearchAdvFragment extends DialogFragment {
                     et.setVisibility(View.GONE);
                     infotv.setVisibility(View.GONE);
                     recentList.setVisibility(View.GONE);
-                    recenttv.setVisibility(View.GONE);
-                    div1.setVisibility(View.GONE);
-                    div2.setVisibility(View.GONE);
+                    recentcontainer.setVisibility(View.GONE);
                     pb.setVisibility(View.VISIBLE);
                     neutButton.setEnabled(false);
 

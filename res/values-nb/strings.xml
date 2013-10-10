@@ -42,6 +42,7 @@
     <string name="sa_search_hint">Søk</string>
     <string name="sa_retry_btn">Prøv igjen</string>
     <string name="sa_recent_title">Nylig valgt:</string>
+    <string name="sa_recent_btn">Fjern historikk</string>
     <string name="sa_info_text">I denne visningen kan du se timeplaner for klasser, fag, rom eller forelesere. Disse vil ikke bli lagt til som abonnement.</string>
 
     <string name="about_title">Om</string>

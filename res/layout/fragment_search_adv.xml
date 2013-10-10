@@ -45,31 +45,33 @@
         android:hint="@string/sa_search_hint"
         android:imeOptions="actionDone" />
 
-    <View
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_height="50sp"
+        android:visibility="gone"
         android:layout_width="fill_parent"
-        android:layout_height="2dp"
-        android:background="@color/ab_end"
-        android:paddingTop="2dp"
-        android:id="@+id/sa_v1"
-        android:visibility="gone"/>
+        android:id="@+id/sa_recent_title_container"
+        android:background="@drawable/recent_background">
 
-    <TextView
-        android:id="@+id/sa_recent_title"
-        android:paddingTop="10dp"
-        android:paddingBottom="3dp"
-        android:paddingLeft="5dp"
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:text="@string/sa_recent_title"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:visibility="gone"/>
+        <TextView
+            android:id="@+id/sa_recent_title"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:layout_height="wrap_content"
+            android:layout_width="0dip"
+            android:text="@string/sa_recent_title"
+            android:layout_weight="1"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="@color/ab_end"
-        android:id="@+id/sa_v2"
-        android:visibility="gone"/>
+        <ImageButton
+            android:id="@+id/sa_recent_btn"
+            android:layout_height="50sp"
+            android:layout_width="50sp"
+            android:src="@drawable/content_discard"
+            android:contentDescription="@string/sa_recent_btn"
+            style="@android:style/Widget.Holo.Button.Borderless"/>
+
+    </LinearLayout>
 
     <ListView
         android:id="@+id/sa_recent_list"
