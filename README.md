@@ -15,10 +15,12 @@ Currently in stage: beta
 
 See LICENSE file
 
+##Version log:
+
+See CHANGELOG.md file
+
 ##TODO:
 
-* Colorize listviews either per subscription or per course
-* Implement swipe to unsubscribe from individual courses
 * Implement pull to refresh on timetable listview
 * Hide lectures that are older than today (Might not be needed with autoupdate)
 * Update timetable after user removes a subscription 
