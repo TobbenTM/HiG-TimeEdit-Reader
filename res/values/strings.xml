@@ -32,6 +32,7 @@
     <string name="welcome_field_empty">Please search for something sensible</string>
 
     <string name="timetable_today">Today</string>
+    <string name="timetable_clear">Available</string>
     <string name="timetable_title">Timetable</string>
     <string name="timetable_room">Room</string>
     <string name="timetable_lecturer">Lecturer</string>

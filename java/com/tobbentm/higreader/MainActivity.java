@@ -26,6 +26,7 @@ public class MainActivity extends Activity implements
     AddSubFragment addFragment;
     SearchAdvFragment saFragment;
     TimeTableFragment timeTableFragment;
+    WelcomeFragment welcomeFragment;
     ViewFragment viewFragment;
     private DBHelper dbhelper = new DBHelper(this);
     private DSSubscriptions subscriptionsDatasource;
@@ -97,7 +98,7 @@ public class MainActivity extends Activity implements
     }
 
     private void showWelcomeDialog() {
-        WelcomeFragment welcomeFragment = new WelcomeFragment();
+        welcomeFragment = new WelcomeFragment();
         welcomeFragment.show(fm, "fragment_welcome");
     }
 
@@ -154,7 +155,8 @@ public class MainActivity extends Activity implements
     }
 
     public void wclose(View view){
-        finish();
+        welcomeFragment.dismiss();
+        showWelcomeDialog();
     }
 
     public void aclose(View view){

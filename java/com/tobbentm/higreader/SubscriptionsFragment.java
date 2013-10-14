@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -26,6 +27,7 @@ public class SubscriptionsFragment extends DialogFragment {
 
     private readyToUpdateListener listener;
     private boolean update = false;
+    private SubsCursorAdapter adapter;
 
     public SubscriptionsFragment(){}
 
@@ -45,7 +47,7 @@ public class SubscriptionsFragment extends DialogFragment {
 
     @Override
     public void onDismiss(DialogInterface dialog){
-        if(update)
+        if(adapter.update())
             listener.readyToUpdate();
         super.onDismiss(dialog);
     }
@@ -83,16 +85,8 @@ public class SubscriptionsFragment extends DialogFragment {
             e.printStackTrace();
         }
 
-        final SubsCursorAdapter adapter = new SubsCursorAdapter(getActivity(), datasource.getCursor(), 0);
+        adapter = new SubsCursorAdapter(getActivity(), datasource.getCursor(), 0);
         list.setAdapter(adapter);
         datasource.close();
-
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(adapter.update())
-                    update = true;
-            }
-        });
     }
 }

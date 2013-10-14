@@ -18,6 +18,12 @@
     <color name="listd_bg_end">
         #442159A3
     </color>
+    <color name="listc_bg_start">
+        #4413cf48
+    </color>
+    <color name="listc_bg_end">
+        #441bac44
+    </color>
     <color name="list_alt_text">
         #C21B1B
     </color>

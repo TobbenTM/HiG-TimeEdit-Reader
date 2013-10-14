@@ -2,6 +2,7 @@ package com.tobbentm.higreader;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,6 +57,7 @@ public class SubsCursorAdapter extends CursorAdapter {
     }
 
     private void deleteSub(String id){
+        updated = true;
         DSSubscriptions ds = new DSSubscriptions(act);
         try {
             ds.open();
@@ -66,7 +68,6 @@ public class SubsCursorAdapter extends CursorAdapter {
         this.changeCursor(ds.getCursor());
         ds.close();
         this.notifyDataSetChanged();
-        updated = true;
     }
 
     public boolean update(){

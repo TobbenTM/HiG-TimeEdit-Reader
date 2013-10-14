@@ -1,5 +1,10 @@
 #HiG TimeEdit Reader
 
+##1.6.4
+* Now showing avalable time when viewing rooms
+* Fixed width for time in timetables
+* Search bugfixes
+
 ##1.6.3:
 * Styled searchadvfragment
 * Added ability to clear history of timetables

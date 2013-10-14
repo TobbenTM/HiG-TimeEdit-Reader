@@ -2,7 +2,9 @@ package com.tobbentm.higreader;
 
 import android.util.Log;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -19,13 +21,11 @@ public class TimeParser {
 
         String[][] results = new String[split2.length-1][6];
         ArrayList<ArrayList<String>> master = new ArrayList<ArrayList<String>>();
-
         String currentdate = "";
 
         for(int i = 1; i < split2.length -1; i++){
             currentdate = split2[i].split("</td>")[0].replaceAll(" Today", "");
             String[] split3 = split2[i].split("</tr>");
-            //Log.d("PARSER", currentdate);
             master.add(dateEntry(currentdate));
             for(int j = 1; j < split3.length -1; j++){
                 ArrayList<String> inner = new ArrayList<String>();
@@ -37,7 +37,47 @@ public class TimeParser {
                 master.add(inner);
             }
         }
-        //Log.d("MASTER", master.toString());
+        return dimensionalPortal(master);
+    }
+
+    public static String[][] timetable(String html, boolean room){
+        String[] split1 = html
+                .replaceAll("<span class=\"tesprite tesprite-floatright tesprite-new\"></span>", "")
+                .split("/table");
+        String[] split2 = split1[0].split("changeDateLink headline leftRounded t .*\">");
+        String startTime, endTime;
+
+        String[][] results = new String[split2.length-1][6];
+        ArrayList<ArrayList<String>> master = new ArrayList<ArrayList<String>>();
+        String currentdate = "";
+
+        for(int i = 1; i < split2.length -1; i++){
+            currentdate = split2[i].split("</td>")[0].replaceAll(" Today", "");
+            String[] split3 = split2[i].split("</tr>");
+            master.add(dateEntry(currentdate));
+            endTime = "0800";
+            for(int j = 1; j < split3.length -1; j++){
+                ArrayList<String> inner = new ArrayList<String>();
+                String[] data = tagData(split3[j]);
+                if(room){
+                    startTime = data[0].split("\n")[0].replace(":", "");
+                    if(
+                            Integer.parseInt(startTime) >= 815 &&
+                            Integer.parseInt(startTime) > Integer.parseInt(endTime)+16 &&
+                            Integer.parseInt(endTime) < 1600 ){
+                        master.add(clearEntry(currentdate, timeString(endTime, startTime)));
+                        Log.d("TIME", "Added clear entry: " + timeString(endTime, startTime));
+                    }
+                    endTime = data[0].split("\n")[2].replace(":", "");
+                }
+                inner.add(currentdate);
+                for(String s : data){
+                    inner.add(s);
+                }
+                Log.d("TIME", "Lecture time: \t\t" + data[1]);
+                master.add(inner);
+            }
+        }
         return dimensionalPortal(master);
     }
 
@@ -45,26 +85,29 @@ public class TimeParser {
         //Log.d("PARSING", "Starting parser");
         List<String> id = new ArrayList<String>();
         List<String> name = new ArrayList<String>();
+        List<String> ids = new ArrayList<String>();
+        List<String> names = new ArrayList<String>();
 
-        //The reason for removing whitespace is to better readability when debugging
         //The reason for splitting at data-id="-1" is that there is no valuable data
         // after it, and it would just cause problems.
         //Still not bug-free though, and should be replaced with a better regex-based
         // solution.
-        String[] split = html.replace(" ", "").split("data-id=\"-1\"");
-        String[] parsed = split[0].split("\"");
+        String[] split = html.split("data-id=\"-1\"");
 
-        //Gather valuable data into the two arrays
-        for (String s : parsed){
-            if(s.contains(".182") || s.contains(".183") || s.contains(".184") || s.contains(".185")){
-                id.add(s);
-            }else if(s.toUpperCase().contains(term.toUpperCase()) && !s.contains(">")){
-                name.add(s);
-            }
+        ids.addAll(Arrays.asList(split[0].split("data-id=\"")));
+        ids.remove(0);
+        names.addAll(Arrays.asList(split[0].split("data-name=\"")));
+        names.remove(0);
+
+
+        for (String s : ids){
+            id.add(s.split("\"")[0]);
+        }
+        for (String s : names){
+            name.add(s.split("\"")[0]);
         }
 
         String[][] result = new String[id.size()][2];
-
         Log.d("HIG.SEARCH.ARRAY", name.toString() + id.toString());
 
         //Join the two arrays into one 2D array
@@ -122,6 +165,10 @@ public class TimeParser {
         arr.add("");
         arr.add("");
         return arr;
+    }
+
+    private static String timeString(String start, String end){
+        return start.replaceFirst("([0-9]{2})", "$1:") + " - " + end.replaceFirst("([0-9]{2})", "$1:");
     }
 
 }

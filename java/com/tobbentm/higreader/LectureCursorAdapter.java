@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,6 @@ import java.util.Date;
 public class LectureCursorAdapter extends CursorAdapter {
 
     private LayoutInflater inflater;
-    private Date date;
     private final SimpleDateFormat orgDate = new SimpleDateFormat("yyyy-MM-dd");
     private final SimpleDateFormat newDate = new SimpleDateFormat("EEE dd/MM");
     private final SimpleDateFormat timef = new SimpleDateFormat("HHmm");
@@ -41,7 +41,7 @@ public class LectureCursorAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         //TODO: Optimize this shit, should not be this much work on one list item
 
-        date = new Date();
+        Date date = new Date();
         try {
             date = orgDate.parse(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DATE)).replaceAll("^.{4}", ""));
         } catch (ParseException e) {
@@ -57,7 +57,7 @@ public class LectureCursorAdapter extends CursorAdapter {
         }
 
         if(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_NAME)) != null &&
-                cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_NAME)).contains("HIGREADER") ){
+                cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_NAME)).contains("HIGREADER.newDate") ){
             view.findViewById(R.id.time_container).setVisibility(View.GONE);
             view.findViewById(R.id.text_container).setVisibility(View.GONE);
             TextView tvDate = (TextView) view.findViewById(R.id.text_date);
@@ -65,6 +65,15 @@ public class LectureCursorAdapter extends CursorAdapter {
 
             tvDate.setText(currentDate);
             view.setBackgroundResource(R.drawable.list_date_background);
+        }else if(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_NAME)) != null &&
+                cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_NAME)).contains("HIGREADER.clear")){
+            view.findViewById(R.id.time_container).setVisibility(View.GONE);
+            view.findViewById(R.id.text_container).setVisibility(View.GONE);
+            TextView tvDate = (TextView) view.findViewById(R.id.text_date);
+            tvDate.setVisibility(View.VISIBLE);
+
+            tvDate.setText("\t" + cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TIME)).replaceAll("\n", " ") + "\t" + context.getResources().getString(R.string.timetable_clear));
+            view.setBackgroundResource(R.drawable.list_clear_background);
         }else{
             view.findViewById(R.id.text_date).setVisibility(View.GONE);
             view.findViewById(R.id.time_container).setVisibility(View.VISIBLE);

@@ -2,7 +2,9 @@
 
 Play store link: https://play.google.com/store/apps/details?id=com.tobbentm.higreader
 
-Currently in stage: beta
+Currently in stage: 
+* Prod: 1.5
+* Beta: 1.6.3
 
 ![Icon](http://tobbentm.com/ul/HiG-Reader_Icon.png "App Icon")
 
@@ -23,10 +25,10 @@ See CHANGELOG.md file
 
 * Implement pull to refresh on timetable listview
 * Hide lectures that are older than today (Might not be needed with autoupdate)
-* Update timetable after user removes a subscription 
 * Parse, save and show if a lecture has been changed in the last 4 days (html tag)
 * Remove progressbar in timetable, and instead add it to actionbar(?)
 * Comment all the code
+* ~~Update timetable after user removes a subscription~~
 * ~~Add room/lecturer view (separate from timetable)~~
 * ~~Create new icon~~
 * ~~Autoupdate at intervals and after initial welcome dialog~~

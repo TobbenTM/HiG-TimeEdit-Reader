@@ -29,6 +29,7 @@ public class ViewFragment extends ListFragment {
     String id, name;
     DBHelper helper;
     DSLecTemp datasource;
+    private boolean room = false;
     private LectureCursorAdapter adapter;
 
     public ViewFragment(String name, String id){
@@ -128,7 +129,9 @@ public class ViewFragment extends ListFragment {
             public void onSuccess(String response) {
                 if(datasource.isOpen()){
                     if(response != null && response.length() > 0){
-                        String[][] result = TimeParser.timetable(response);
+                        if(id.contains(".185"))
+                            room = true;
+                        String[][] result = TimeParser.timetable(response, room);
 
                         for(String[] arr : result){
                             datasource.addLecture(arr[2], arr[3], arr[4], arr[0], arr[1]);
