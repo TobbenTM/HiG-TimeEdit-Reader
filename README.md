@@ -4,7 +4,7 @@ Play store link: https://play.google.com/store/apps/details?id=com.tobbentm.higr
 
 Currently in stage: 
 * Prod: 1.5
-* Beta: 1.6.3
+* Beta: 1.6.4
 
 ![Icon](http://tobbentm.com/ul/HiG-Reader_Icon.png "App Icon")
 
@@ -19,10 +19,11 @@ See LICENSE file
 
 ##Version log:
 
-See CHANGELOG.md file
+See [CHANGELOG.md](CHANGELOG.md) file
 
 ##TODO:
 
+* Switch to CSV data source
 * Implement pull to refresh on timetable listview
 * Hide lectures that are older than today (Might not be needed with autoupdate)
 * Parse, save and show if a lecture has been changed in the last 4 days (html tag)
