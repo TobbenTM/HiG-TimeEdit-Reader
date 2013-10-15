@@ -15,7 +15,7 @@ Currently in stage:
 
 ##License:
 
-See LICENSE file
+See [LICENSE](LICENSE) file
 
 ##Version log:
 
@@ -24,6 +24,7 @@ See [CHANGELOG.md](CHANGELOG.md) file
 ##TODO:
 
 * Switch to CSV data source
+* Check for invalid characters in search term (![a-zA-Z0-9])
 * Implement pull to refresh on timetable listview
 * Hide lectures that are older than today (Might not be needed with autoupdate)
 * Parse, save and show if a lecture has been changed in the last 4 days (html tag)
