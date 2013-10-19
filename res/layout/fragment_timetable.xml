@@ -5,6 +5,15 @@
               android:layout_width="match_parent"
               android:layout_height="fill_parent">
 
+    <TextView
+        android:text="@string/timetable_no_update"
+        android:padding="20dp"
+        android:textAlignment="center"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/timetable_tv"
+        android:visibility="gone" />
+
     <ProgressBar
         android:layout_gravity="center_horizontal|center_vertical"
         style="?android:attr/progressBarStyleLarge"

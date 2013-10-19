@@ -3,8 +3,8 @@
 Play store link: https://play.google.com/store/apps/details?id=com.tobbentm.higreader
 
 Currently in stage: 
-* Prod: 1.5
-* Beta: 1.6.4
+* Prod: 1.6.5
+* Beta: 1.6.5
 
 ![Icon](http://tobbentm.com/ul/HiG-Reader_Icon.png "App Icon")
 
@@ -51,6 +51,7 @@ See [CHANGELOG.md](CHANGELOG.md) file
 ##Known problems
 
 * TimeEdit HTML is really bloated, with a least ~1.3k lines. Not much to do about it. Translates to about 250kB for each update.
+	* Will possibly be fixed with CSV datasource
 
 ##Screens
 

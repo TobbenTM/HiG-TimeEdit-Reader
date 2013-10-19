@@ -34,6 +34,7 @@
     <string name="timetable_today">I dag</string>
     <string name="timetable_clear">Ledig</string>
     <string name="timetable_title">Timeplan</string>
+    <string name="timetable_no_update">Kunne ikke oppdatere.\nVennligst sjekk din nettverkstilkobling.</string>
     <string name="timetable_room">Rom</string>
     <string name="timetable_lecturer">Foreleser</string>
     <string name="timetable_update_error">Klarte ikke å oppdatere timeplan</string>

@@ -1,5 +1,10 @@
 #HiG TimeEdit Reader
 
+##1.6.5
+* Bugfix: now shows full lecturer name when searching
+* Bugfix: now shows 'permanent' message when failing to update an empty timetable
+* Bugfix: now allows for subscriptions to room or lecturer
+
 ##1.6.4
 * Now showing avalable time when viewing rooms
 * Fixed width for time in timetables

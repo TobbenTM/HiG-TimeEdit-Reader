@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -31,6 +32,7 @@ import java.util.List;
 public class TimeTableFragment extends ListFragment {
 
     ProgressBar pb;
+    TextView errortv;
     DSLectures datasource;
     DSSubscriptions subscriptionsDatasource;
     DSSettings settingsDatasource;
@@ -42,6 +44,7 @@ public class TimeTableFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_timetable, container, false);
         pb = (ProgressBar) view.findViewById(R.id.timetable_pb);
+        errortv = (TextView) view.findViewById(R.id.timetable_tv);
         setHasOptionsMenu(true);
         return view;
     }
@@ -146,6 +149,7 @@ public class TimeTableFragment extends ListFragment {
             public void onSuccess(String response) {
                 if(datasource.isOpen()){
                     if(response != null && response.length() > 0){
+                        errortv.setVisibility(View.GONE);
                         String[][] result = TimeParser.timetable(response);
 
                         helper.truncate(helper.getWritableDatabase(), DBHelper.TABLE_LECTURES);
@@ -164,7 +168,10 @@ public class TimeTableFragment extends ListFragment {
                             }
                         });
                     }else{
-                        Toast.makeText(getActivity(), getResources().getString(R.string.timetable_update_error), Toast.LENGTH_SHORT).show();
+                        if(adapter.isEmpty())
+                            errortv.setVisibility(View.VISIBLE);
+                        else
+                            Toast.makeText(getActivity(), getResources().getString(R.string.timetable_update_error), Toast.LENGTH_SHORT).show();
                         onFailure(null, null);
                     }
                 }
@@ -178,7 +185,10 @@ public class TimeTableFragment extends ListFragment {
                             pb.setVisibility(View.GONE);
                             }
                     });
-                    Toast.makeText(getActivity(), getResources().getString(R.string.timetable_update_error), Toast.LENGTH_SHORT).show();
+                    if(adapter.isEmpty())
+                        errortv.setVisibility(View.VISIBLE);
+                    else
+                        Toast.makeText(getActivity(), getResources().getString(R.string.timetable_update_error), Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -34,6 +34,7 @@
     <string name="timetable_today">Today</string>
     <string name="timetable_clear">Available</string>
     <string name="timetable_title">Timetable</string>
+    <string name="timetable_no_update">Unable to update.\nPlease check your network connection.</string>
     <string name="timetable_room">Room</string>
     <string name="timetable_lecturer">Lecturer</string>
     <string name="timetable_update_error">Could not update timetable.</string>
@@ -54,6 +55,8 @@
     <string-array name="search_array">
         <item>Class</item>
         <item>Course</item>
+        <item>Lecturer</item>
+        <item>Room</item>
     </string-array>
 
     <string-array name="sa_search_array">
