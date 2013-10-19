@@ -1,5 +1,8 @@
 #HiG TimeEdit Reader
 
+##1.6.6
+* Making sure all bugfixes apply to all languages.......
+
 ##1.6.5
 * Bugfix: now shows full lecturer name when searching
 * Bugfix: now shows 'permanent' message when failing to update an empty timetable

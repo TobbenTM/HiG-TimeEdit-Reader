@@ -3,8 +3,8 @@
 Play store link: https://play.google.com/store/apps/details?id=com.tobbentm.higreader
 
 Currently in stage: 
-* Prod: 1.6.5
-* Beta: 1.6.5
+* Prod: 1.6.6
+* Beta: 1.6.6
 
 ![Icon](http://tobbentm.com/ul/HiG-Reader_Icon.png "App Icon")
 

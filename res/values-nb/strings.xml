@@ -54,7 +54,9 @@
 
     <string-array name="search_array">
         <item>Klasse</item>
-        <item>Fag</item>>
+        <item>Fag</item>
+        <item>Foreleser</item>
+        <item>Rom</item>
     </string-array>
 
     <string-array name="sa_search_array">
