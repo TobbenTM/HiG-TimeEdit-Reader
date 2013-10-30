@@ -21,16 +21,18 @@ import com.tobbentm.higreader.db.DSLecTemp;
 
 import java.sql.SQLException;
 
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
+
 /**
  * Created by Tobias on 26.09.13.
  */
-public class ViewFragment extends ListFragment {
+public class ViewFragment extends ListFragment implements PullToRefreshAttacher.OnRefreshListener {
 
-    ProgressBar pb;
     TextView errortv;
     String id, name;
     DBHelper helper;
     DSLecTemp datasource;
+    private PullToRefreshAttacher ptra;
     private boolean room = false;
     private LectureCursorAdapter adapter;
 
@@ -44,8 +46,9 @@ public class ViewFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_timetable, container, false);
-        pb = (ProgressBar) view.findViewById(R.id.timetable_pb);
         errortv = (TextView) view.findViewById(R.id.timetable_tv);
+        ptra = ((MainActivity) getActivity()).getPtra();
+        ptra.addRefreshableView(view.findViewById(android.R.id.list), this);
         setHasOptionsMenu(true);
         return view;
     }
@@ -87,7 +90,6 @@ public class ViewFragment extends ListFragment {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.action_update:
-                //Toast.makeText(getActivity(), "Updating..", Toast.LENGTH_SHORT).show();
                 updateLectures();
                 return true;
             default:
@@ -120,9 +122,7 @@ public class ViewFragment extends ListFragment {
     }
 
     public void updateLectures(){
-        pb.setVisibility(View.VISIBLE);
-        pb.animate().translationY(1).start();
-
+        ptra.setRefreshing(true);
         id += ",-1,1.182";
         //Needed to get lecture name for some lectures.
         //Don't know why. It just works (tm).
@@ -137,18 +137,14 @@ public class ViewFragment extends ListFragment {
                             room = true;
                         String[][] result = TimeParser.timetable(response, room);
 
+                        helper.truncate(helper.getWritableDatabase(), DBHelper.TABLE_TEMP_LECTURES);
                         for(String[] arr : result){
                             datasource.addLecture(arr[2], arr[3], arr[4], arr[0], arr[1]);
                         }
 
                         adapter.changeCursor(datasource.getLecturesCursor());
                         adapter.notifyDataSetChanged();
-                        pb.animate().translationY(-1).withEndAction(new Runnable() {
-                            @Override
-                            public void run() {
-                                pb.setVisibility(View.GONE);
-                            }
-                        });
+                        ptra.setRefreshComplete();
                     }else{
                         if(adapter.isEmpty())
                             errortv.setVisibility(View.VISIBLE);
@@ -161,12 +157,7 @@ public class ViewFragment extends ListFragment {
             @Override
             public void onFailure(Throwable e, String response){
                 if(isAdded() && datasource.isOpen()){
-                    pb.animate().translationY(1).withEndAction(new Runnable() {
-                        @Override
-                        public void run() {
-                            pb.setVisibility(View.GONE);
-                        }
-                    });
+                    ptra.setRefreshComplete();
                     if(adapter.isEmpty())
                         errortv.setVisibility(View.VISIBLE);
                     else
@@ -176,4 +167,8 @@ public class ViewFragment extends ListFragment {
         });
     }
 
+    @Override
+    public void onRefreshStarted(View view) {
+        updateLectures();
+    }
 }

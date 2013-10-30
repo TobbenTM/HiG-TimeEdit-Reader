@@ -1,5 +1,9 @@
 #HiG TimeEdit Reader
 
+##1.7
+* Implemented pull-to-refresh
+* Fixed bug in timetable view where the update did not work properly
+
 ##1.6.6
 * Making sure all bugfixes apply to all languages.......
 

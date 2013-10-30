@@ -50,7 +50,12 @@
     <string name="about_title">About</string>
     <string name="about_close_btn">Close</string>
     <string name="about_version_append">You are running version:</string>
-    <string name="about_main">You can find me at www.tobbentm.com\nRepository for this app at www.github.com/tobbentm\n\nLibraries used:\nandroid-async-http\nhttp://loopj.com/android-async-http/</string>
+    <string name="about_main">You can find me at www.tobbentm.com\nRepository for this app at www.github.com/tobbentm\n\nLibraries used:\nandroid-async-http from loopj\nActionBar-PullToRefresh from chrisbanes</string>
+
+    <string name="pull_to_refresh_pull_label">Pull to refresh…</string>
+    <string name="pull_to_refresh_release_label">Release to refresh…</string>
+    <string name="pull_to_refresh_refreshing_label">Refreshing timetable…</string>
+
 
     <string-array name="search_array">
         <item>Class</item>

@@ -4,16 +4,16 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.tobbentm.higreader.db.DBHelper;
-import com.tobbentm.higreader.db.DSRecent;
 import com.tobbentm.higreader.db.DSSubscriptions;
 
 import java.sql.SQLException;
+
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 
 public class MainActivity extends Activity implements
         WelcomeFragment.readyToUpdateListener,
@@ -28,6 +28,7 @@ public class MainActivity extends Activity implements
     TimeTableFragment timeTableFragment;
     WelcomeFragment welcomeFragment;
     ViewFragment viewFragment;
+    private PullToRefreshAttacher ptra;
     private DBHelper dbhelper = new DBHelper(this);
     private DSSubscriptions subscriptionsDatasource;
     //private DSRecent recentDatasource;
@@ -38,21 +39,14 @@ public class MainActivity extends Activity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         subscriptionsDatasource = new DSSubscriptions(this);
-        //recentDatasource = new DSRecent(this);
-        //settingsDatasource = new DSSettings(this);
 
         try {
             subscriptionsDatasource.open();
-            //recentDatasource.open();
-            //settingsDatasource.open();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        //if(recentDatasource.getSize() > 10)
-        //    recentDatasource.trimDB();
-
-        //recentDatasource.close();
+        ptra = PullToRefreshAttacher.get(this);
 
         if(subscriptionsDatasource.getSize() == 0){
             dbTruncate();
@@ -67,7 +61,6 @@ public class MainActivity extends Activity implements
     protected void onPause(){
         super.onPause();
         subscriptionsDatasource.close();
-        //settingsDatasource.close();
     }
 
     @Override
@@ -180,6 +173,10 @@ public class MainActivity extends Activity implements
     @Override
     public void openTimeTable(String name, String ttid) {
         showViewFragment(name, ttid);
+    }
+
+    public PullToRefreshAttacher getPtra(){
+        return ptra;
     }
 
 }

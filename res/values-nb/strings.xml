@@ -50,7 +50,12 @@
     <string name="about_title">Om</string>
     <string name="about_close_btn">Lukk</string>
     <string name="about_version_append">Du kjører versjon:</string>
-    <string name="about_main">Du kan finne meg på www.tobbentm.com\nKildebrønn finner du på www.github.com/tobbentm\n\nBiblioteker brukt:\nandroid-async-http\nhttp://loopj.com/android-async-http/</string>
+    <string name="about_main">Du kan finne meg på www.tobbentm.com\nKildebrønn finner du på www.github.com/tobbentm\n\nBiblioteker brukt:\nandroid-async-http fra loopj\nActionBar-PullToRefresh fra chrisbanes</string>
+
+    <string name="pull_to_refresh_pull_label">Dra for å oppdatere…</string>
+    <string name="pull_to_refresh_release_label">Slipp for å oppdatere…</string>
+    <string name="pull_to_refresh_refreshing_label">Oppdaterer timeplan…</string>
+
 
     <string-array name="search_array">
         <item>Klasse</item>

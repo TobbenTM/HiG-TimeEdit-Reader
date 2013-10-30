@@ -26,25 +26,28 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
+
 /**
  * Created by Tobias on 27.08.13.
  */
-public class TimeTableFragment extends ListFragment {
+public class TimeTableFragment extends ListFragment implements PullToRefreshAttacher.OnRefreshListener {
 
-    ProgressBar pb;
     TextView errortv;
     DSLectures datasource;
     DSSubscriptions subscriptionsDatasource;
     DSSettings settingsDatasource;
     DBHelper helper;
+    private PullToRefreshAttacher ptra;
     private Date date = new Date();
     private LectureCursorAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_timetable, container, false);
-        pb = (ProgressBar) view.findViewById(R.id.timetable_pb);
         errortv = (TextView) view.findViewById(R.id.timetable_tv);
+        ptra = ((MainActivity) getActivity()).getPtra();
+        ptra.addRefreshableView(view.findViewById(android.R.id.list), this);
         setHasOptionsMenu(true);
         return view;
     }
@@ -79,7 +82,6 @@ public class TimeTableFragment extends ListFragment {
         setListAdapter(adapter);
 
         checkUpdate();
-
     }
 
     @Override
@@ -129,9 +131,7 @@ public class TimeTableFragment extends ListFragment {
     }
 
     public void updateLectures(){
-        pb.setVisibility(View.VISIBLE);
-        pb.animate().translationY(1).start();
-
+        ptra.setRefreshing(true);
         String ids = "";
         List<DBSubscriptions> list = subscriptionsDatasource.getSubscriptions();
         int d = 0;
@@ -161,12 +161,7 @@ public class TimeTableFragment extends ListFragment {
                         adapter.notifyDataSetChanged();
                         Long time = date.getTime();
                         settingsDatasource.updateSetting(DBHelper.SETTING_LASTUPDATED, time.toString());
-                        pb.animate().translationY(-1).withEndAction(new Runnable() {
-                            @Override
-                            public void run() {
-                                pb.setVisibility(View.GONE);
-                            }
-                        });
+                        ptra.setRefreshComplete();
                     }else{
                         if(adapter.isEmpty())
                             errortv.setVisibility(View.VISIBLE);
@@ -179,12 +174,7 @@ public class TimeTableFragment extends ListFragment {
             @Override
             public void onFailure(Throwable e, String response){
                 if(isAdded() && datasource.isOpen()){
-                    pb.animate().translationY(1).withEndAction(new Runnable() {
-                        @Override
-                        public void run() {
-                            pb.setVisibility(View.GONE);
-                            }
-                    });
+                    ptra.setRefreshComplete();
                     if(adapter.isEmpty())
                         errortv.setVisibility(View.VISIBLE);
                     else
@@ -209,4 +199,8 @@ public class TimeTableFragment extends ListFragment {
         }
     }
 
+    @Override
+    public void onRefreshStarted(View view) {
+        updateLectures();
+    }
 }
