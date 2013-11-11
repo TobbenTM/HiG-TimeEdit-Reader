@@ -3,8 +3,6 @@ package com.tobbentm.higreader;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +41,7 @@ public class LectureCursorAdapter extends CursorAdapter {
 
         Date date = new Date();
         try {
-            date = orgDate.parse(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DATE)).replaceAll("^.{4}", ""));
+            date = orgDate.parse(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DATE)));
         } catch (ParseException e) {
             e.printStackTrace();
         } catch (NullPointerException n) {

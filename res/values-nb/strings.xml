@@ -21,6 +21,7 @@
     <string name="add_search_hint">Klasse-/Fag-navn</string>
     <string name="add_net_failure">Noe gikk galt!</string>
     <string name="add_field_empty">Vennligst søk etter noe fornuftig</string>
+    <string name="add_field_illegal">Ulovlige tegn i søkestreng!</string>
 
     <string name="welcome_text">Dette er en applikasjon jeg lagde som ett personlig verktøy. Om du skulle gå glipp av forelesninger på grunn av denne appen er det ikke mitt ansvar. Denne appen ligger også ute som åpen kildekode. Du kan finne pakkebrønnen her: www.github.com/tobbentm.\n\nFor å starte, søk etter klasse eller fag:</string>
     <string name="welcome_nores_error">Ingen resultater, prøv igjen</string>
@@ -50,7 +51,7 @@
     <string name="about_title">Om</string>
     <string name="about_close_btn">Lukk</string>
     <string name="about_version_append">Du kjører versjon:</string>
-    <string name="about_main">Du kan finne meg på www.tobbentm.com\nKildebrønn finner du på www.github.com/tobbentm\n\nBiblioteker brukt:\nandroid-async-http fra loopj\nActionBar-PullToRefresh fra chrisbanes</string>
+    <string name="about_main">Du kan finne meg på www.tobbentm.com\nKildebrønn finner du på www.github.com/tobbentm\n\nBiblioteker brukt:\nandroid-async-http fra loopj\nActionBar-PullToRefresh fra chrisbanes\nOpenCSV fra opencsv.sourceforge.net</string>
 
     <string name="pull_to_refresh_pull_label">Dra for å oppdatere…</string>
     <string name="pull_to_refresh_release_label">Slipp for å oppdatere…</string>

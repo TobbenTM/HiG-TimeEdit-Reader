@@ -2,10 +2,13 @@ package com.tobbentm.higreader;
 
 import android.util.Log;
 
-import java.lang.reflect.Array;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 /**
  * Created by Tobias on 26.08.13.
@@ -13,6 +16,52 @@ import java.util.List;
  */
 public class TimeParser {
 
+    public static String[][] timetable(String csv, boolean room){
+        String csv2 = csv.split("\n", 5)[4];
+        CSVReader reader = new CSVReader(new StringReader(csv2), ',', '"');
+        String[] line;
+        String currentdate = "", startTime, endTime = "0";
+        ArrayList<ArrayList<String>> master = new ArrayList<ArrayList<String>>();
+        //Log.d("CSV", csv2);
+
+        try {
+            while((line = reader.readNext()) != null){
+                if(currentdate.length() == 0){
+                    endTime = "0800";
+                    currentdate = line[0];
+                    master.add(dateEntry(line[0]));
+                }
+                if(!line[0].contains(currentdate)){
+                    endTime = "0800";
+                    master.add(dateEntry(line[0]));
+                }else{
+                    if(room){
+                        startTime = line[1].replace(":", "").replace(" ", "");
+                        if( Integer.parseInt(startTime) >= 815 &&
+                                Integer.parseInt(startTime) > Integer.parseInt(endTime)+16 &&
+                                Integer.parseInt(endTime) < 1600 ){
+                            master.add(clearEntry(currentdate, timeString(endTime, startTime)));
+                        }
+                        endTime = line[3].replace(":", "").replace(" ", "");
+                    }
+                }
+                ArrayList<String> inner = new ArrayList<String>();
+
+                inner.add(line[0]);
+                inner.add(line[1].replaceAll(" ", "")+"\n-\n"+line[3].replaceAll(" ", ""));
+                inner.add(line[4]);
+                inner.add(line[5]);
+                inner.add(line[6]);
+                master.add(inner);
+                currentdate = line[0];
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return dimensionalPortal(master);
+    }
+/*
     public static String[][] timetable(String html){
         String[] split1 = html
                 .replaceAll("<span class=\"tesprite tesprite-floatright tesprite-new\"></span>", "")
@@ -39,6 +88,7 @@ public class TimeParser {
         }
         return dimensionalPortal(master);
     }
+
 
     public static String[][] timetable(String html, boolean room){
         String[] split1 = html
@@ -80,7 +130,7 @@ public class TimeParser {
         }
         return dimensionalPortal(master);
     }
-
+*/
     public static String[][] search(String html, String term){
         //Log.d("PARSING", "Starting parser");
         List<String> id = new ArrayList<String>();
@@ -146,6 +196,7 @@ public class TimeParser {
     }
 
     private static ArrayList<String> dateEntry(String date){
+        // Adding a db entry consisting of date and tag to generate new date entries
         ArrayList<String> arr = new ArrayList<String>();
         arr.add(date);
         arr.add("");
@@ -157,6 +208,7 @@ public class TimeParser {
     }
 
     private static ArrayList<String> clearEntry(String date, String time){
+        // Adding a db entry consisting of date, time and tag to generate clear entries
         ArrayList<String> arr = new ArrayList<String>();
         arr.add(date);
         arr.add(time);

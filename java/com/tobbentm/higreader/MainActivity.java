@@ -31,8 +31,6 @@ public class MainActivity extends Activity implements
     private PullToRefreshAttacher ptra;
     private DBHelper dbhelper = new DBHelper(this);
     private DSSubscriptions subscriptionsDatasource;
-    //private DSRecent recentDatasource;
-    //private DSSettings settingsDatasource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +44,14 @@ public class MainActivity extends Activity implements
             e.printStackTrace();
         }
 
-        ptra = PullToRefreshAttacher.get(this);
+        // Options for PullToRefreshAttacher, and setting draw distance to 60% of listview
+        PullToRefreshAttacher.Options ptraOpt = new PullToRefreshAttacher.Options();
+        ptraOpt.refreshScrollDistance = 0.60F;
 
+        // Necessary to assign in activity, will be fetched from fragments
+        ptra = PullToRefreshAttacher.get(this, ptraOpt);
+
+        // Checking if there is no subscriptions (first time)
         if(subscriptionsDatasource.getSize() == 0){
             dbTruncate();
             showWelcomeDialog();
@@ -73,6 +77,7 @@ public class MainActivity extends Activity implements
         }
     }
 
+    // Fragment transaction for TimeTableFragment
     private void showTimeTable(){
         findViewById(R.id.activity_pb).setVisibility(View.GONE);
         timeTableFragment = new TimeTableFragment();
@@ -81,6 +86,7 @@ public class MainActivity extends Activity implements
         ft.commit();
     }
 
+    // Fragment transaction for ViewFragment
     private void showViewFragment(String name, String id){
         viewFragment = new ViewFragment(name, id);
         FragmentTransaction ft = fm.beginTransaction();
@@ -90,26 +96,31 @@ public class MainActivity extends Activity implements
         ft.commit();
     }
 
+    // Fragment transaction for Welcome Dialog
     private void showWelcomeDialog() {
         welcomeFragment = new WelcomeFragment();
         welcomeFragment.show(fm, "fragment_welcome");
     }
 
+    // Fragment transaction for Subscriptions Dialog
     private void showSubsDialog() {
         subsFragment = new SubscriptionsFragment();
         subsFragment.show(fm, "fragment_subs");
     }
 
+    // Fragment transaction for Add Dialog
     private void showAddDialog(){
         addFragment = new AddSubFragment();
         addFragment.show(fm, "fragment_add");
     }
 
+    // Fragment transaction for About Dialog
     private void showAboutDialog(){
         AboutFragment aboutFragment = new AboutFragment();
         aboutFragment.show(fm, "fragment_about");
     }
 
+    // Fragment transaction for SearchAdv Dialog
     private void showSearchAdvDialog(){
         saFragment = new SearchAdvFragment();
         saFragment.show(fm, "fragment_search_adv");
@@ -126,6 +137,7 @@ public class MainActivity extends Activity implements
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case android.R.id.home:
+                // Clears entire backstack
                 fm.popBackStack(null, fm.POP_BACK_STACK_INCLUSIVE);
                 return true;
             case R.id.action_subs:
@@ -144,38 +156,46 @@ public class MainActivity extends Activity implements
 
     private void dbTruncate(){
         //dbhelper.truncate(dbhelper.getWritableDatabase(), DBHelper.TABLE_SUBSCRIPTIONS);
+        // Delete all lectures
         dbhelper.truncate(dbhelper.getWritableDatabase(), DBHelper.TABLE_LECTURES);
     }
 
     public void wclose(View view){
+        // onClick function from welcomedialog
         welcomeFragment.dismiss();
         showWelcomeDialog();
     }
 
     public void aclose(View view){
+        // onClick function from adddialog
         addFragment.getDialog().dismiss();
     }
 
     public void saclose(View view){
+        // onClick function from searchadvdialog
         saFragment.getDialog().dismiss();
     }
 
     public void subAdd(View view){
+        // onClick function from subscriptionsdialog
         subsFragment.getDialog().dismiss();
         showAddDialog();
     }
 
     @Override
     public void readyToUpdate() {
+        // Listener function
         timeTableFragment.updateLectures();
     }
 
     @Override
     public void openTimeTable(String name, String ttid) {
+        // Listener function
         showViewFragment(name, ttid);
     }
 
     public PullToRefreshAttacher getPtra(){
+        // Getter for pulltorefreshattacher
         return ptra;
     }
 

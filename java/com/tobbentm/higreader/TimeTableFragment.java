@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.ListFragment;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -46,8 +47,12 @@ public class TimeTableFragment extends ListFragment implements PullToRefreshAtta
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_timetable, container, false);
         errortv = (TextView) view.findViewById(R.id.timetable_tv);
+
+        // Get pullToRefreshAttacher from activity and attach to list
         ptra = ((MainActivity) getActivity()).getPtra();
         ptra.addRefreshableView(view.findViewById(android.R.id.list), this);
+
+        // Need to set to true in order to add fragmentspecific items (action_update)
         setHasOptionsMenu(true);
         return view;
     }
@@ -55,17 +60,19 @@ public class TimeTableFragment extends ListFragment implements PullToRefreshAtta
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        // Initiating datasources and helper
         datasource = new DSLectures(getActivity());
         subscriptionsDatasource = new DSSubscriptions(getActivity());
         settingsDatasource = new DSSettings(getActivity());
         helper = new DBHelper(getActivity());
 
+        // Main timetable dont need to have custom title, and to go up
         ActionBar ab = getActivity().getActionBar();
         ab.setTitle(getActivity().getResources().getString(R.string.timetable_title));
         ab.setDisplayHomeAsUpEnabled(false);
         ab.setHomeButtonEnabled(false);
 
-        //Log.d("FRAG", "Opening datasources");
         try {
             datasource.open();
             subscriptionsDatasource.open();
@@ -86,6 +93,7 @@ public class TimeTableFragment extends ListFragment implements PullToRefreshAtta
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Add fragment specific items to actionbar (action_update)
         inflater.inflate(R.menu.timetablemenu, menu);
     }
 
@@ -104,6 +112,7 @@ public class TimeTableFragment extends ListFragment implements PullToRefreshAtta
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
+        // Empty function to remove onClick animation/color on lectures
     }
 
     @Override
@@ -150,7 +159,7 @@ public class TimeTableFragment extends ListFragment implements PullToRefreshAtta
                 if(datasource.isOpen()){
                     if(response != null && response.length() > 0){
                         errortv.setVisibility(View.GONE);
-                        String[][] result = TimeParser.timetable(response);
+                        String[][] result = TimeParser.timetable(response, false);
 
                         helper.truncate(helper.getWritableDatabase(), DBHelper.TABLE_LECTURES);
                         for(String[] arr : result){

@@ -1,5 +1,11 @@
 #HiG TimeEdit Reader
 
+##1.7.1
+* Fixed bug where list of recent searches reappeared after reopening the app
+* Now checking for invalid search characters
+* Shortened pull range in order to refresh
+* Switched to CSV datasource! Whoohoo
+
 ##1.7
 * Implemented pull-to-refresh
 * Fixed bug in timetable view where the update did not work properly

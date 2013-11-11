@@ -111,76 +111,81 @@ public class AddSubFragment extends DialogFragment {
             public void onClick(View v)
             {
                 if(et.getText().length() > 0){
-                    //Used to close dialog
-                    Boolean closeDialog = false;
+                    if(!et.getText().toString().matches("[^a-zA-Z0-9\\s-]")){
+                        //Used to close dialog
+                        Boolean closeDialog = false;
 
-                    //Manager to close keyboard after searching
-                    InputMethodManager imgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imgr.hideSoftInputFromWindow(et.getWindowToken(), 0);
+                        //Manager to close keyboard after searching
+                        InputMethodManager imgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imgr.hideSoftInputFromWindow(et.getWindowToken(), 0);
 
-                    //Hide old shit, show progressbar, disable search button
-                    spinner.setVisibility(View.GONE);
-                    et.setVisibility(View.GONE);
-                    pb.setVisibility(View.VISIBLE);
-                    neutButton.setEnabled(false);
+                        //Hide old shit, show progressbar, disable search button
+                        spinner.setVisibility(View.GONE);
+                        et.setVisibility(View.GONE);
+                        pb.setVisibility(View.VISIBLE);
+                        neutButton.setEnabled(false);
 
-                    //Get string from search field
-                    final String term = et.getText().toString();
+                        //Get string from search field
+                        final String term = et.getText().toString();
 
-                    //Send to network class
-                    Network.search(term, spinner.getSelectedItem().toString(), getResources().getStringArray(R.array.search_array), new AsyncHttpResponseHandler(){
-                        @Override
-                        public void onSuccess(String response){
-                            Log.d("DIALOG", "onSuccess starting");
+                        //Send to network class
+                        Network.search(term, spinner.getSelectedItem().toString(), getResources().getStringArray(R.array.search_array), new AsyncHttpResponseHandler(){
+                            @Override
+                            public void onSuccess(String response){
+                                Log.d("DIALOG", "onSuccess starting");
 
-                            //Get parsed results from parser
-                            final String[][] results = TimeParser.search(response, term);
-                            String[] names = new String[results.length];
+                                //Get parsed results from parser
+                                final String[][] results = TimeParser.search(response, term);
+                                String[] names = new String[results.length];
 
-                            //Create separate (1D) array of names of classes/courses
-                            for(int i = 0; i < results.length; i++){
-                                names[i] = results[i][1];
-                            }
-
-                            pb.setVisibility(View.GONE);
-
-                            //Arrayadapter for populating the listview
-                            final ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_expandable_list_item_1, names);
-                            lv.setAdapter(adapter);
-                            lv.setVisibility(View.VISIBLE);
-
-                            //onClick Listener for listview
-                            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    datasource = new DSSubscriptions(getActivity());
-                                    try {
-                                        datasource.open();
-                                    } catch (SQLException e) {
-                                        e.printStackTrace();
-                                    }
-                                    datasource.addSubscription(results[position][0], results[position][1]);
-                                    datasource.close();
-                                    listener.readyToUpdate();
-                                    dismiss();
+                                //Create separate (1D) array of names of classes/courses
+                                for(int i = 0; i < results.length; i++){
+                                    names[i] = results[i][1];
                                 }
-                            });
 
-                            if(lv.getCount() == 0){
-                                aerror.setVisibility(View.VISIBLE);
-                                abutton.setVisibility(View.VISIBLE);
+                                pb.setVisibility(View.GONE);
+
+                                //Arrayadapter for populating the listview
+                                final ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_expandable_list_item_1, names);
+                                lv.setAdapter(adapter);
+                                lv.setVisibility(View.VISIBLE);
+
+                                //onClick Listener for listview
+                                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                        datasource = new DSSubscriptions(getActivity());
+                                        try {
+                                            datasource.open();
+                                        } catch (SQLException e) {
+                                            e.printStackTrace();
+                                        }
+                                        datasource.addSubscription(results[position][0], results[position][1]);
+                                        datasource.close();
+                                        listener.readyToUpdate();
+                                        dismiss();
+                                    }
+                                });
+
+                                if(lv.getCount() == 0){
+                                    aerror.setVisibility(View.VISIBLE);
+                                    abutton.setVisibility(View.VISIBLE);
+                                }
+
                             }
+                            @Override
+                            public void onFailure(Throwable e, String response){
+                                Toast.makeText(getActivity(), getResources().getString(R.string.add_net_failure), Toast.LENGTH_LONG).show();
+                                Log.d("NET", e.toString());
+                            }
+                        });
 
-                        }
-                        @Override
-                        public void onFailure(Throwable e, String response){
-                            Toast.makeText(getActivity(), getResources().getString(R.string.add_net_failure), Toast.LENGTH_LONG).show();
-                            Log.d("NET", e.toString());
-                        }
-                    });
-
-                    if(closeDialog)
-                        dismiss();
+                        if(closeDialog)
+                            dismiss();
+                    }else{
+                        //If search string contains illegal characters, this will show up
+                        Toast.makeText(getActivity(), getResources().getString(R.string.add_field_illegal), Toast.LENGTH_SHORT).show();
+                    }
                 }else{
                     //If nothing is written in search field, this will show up
                     Toast.makeText(getActivity(), getResources().getString(R.string.add_field_empty), Toast.LENGTH_SHORT).show();

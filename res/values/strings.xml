@@ -21,6 +21,7 @@
     <string name="add_search_hint">Class/Course name</string>
     <string name="add_net_failure">Something went wrong!</string>
     <string name="add_field_empty">Please search for something sensible</string>
+    <string name="add_field_illegal">Illegal character(s) in search string!</string>
 
     <string name="welcome_text">This is an app I made as a personal tool. I do not take responsibility if you happen to miss any lectures because of using this app. This app is also opensource. You will find the repository here: www.github.com/tobbentm.\n\nTo start, please add a class or course subscription:</string>
     <string name="welcome_nores_error">No results, please try again</string>
@@ -50,7 +51,7 @@
     <string name="about_title">About</string>
     <string name="about_close_btn">Close</string>
     <string name="about_version_append">You are running version:</string>
-    <string name="about_main">You can find me at www.tobbentm.com\nRepository for this app at www.github.com/tobbentm\n\nLibraries used:\nandroid-async-http from loopj\nActionBar-PullToRefresh from chrisbanes</string>
+    <string name="about_main">You can find me at www.tobbentm.com\nRepository for this app at www.github.com/tobbentm\n\nLibraries used:\nandroid-async-http from loopj\nActionBar-PullToRefresh from chrisbanes\nOpenCSV from opencsv.sourceforge.net</string>
 
     <string name="pull_to_refresh_pull_label">Pull to refresh…</string>
     <string name="pull_to_refresh_release_label">Release to refresh…</string>
