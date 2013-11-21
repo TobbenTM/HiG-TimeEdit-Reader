@@ -161,6 +161,7 @@ public class SearchAdvFragment extends DialogFragment {
             recentList.setAdapter(adapter);
         }
 
+        // Onclicklistener to truncate recent list
         clearbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -264,17 +265,26 @@ public class SearchAdvFragment extends DialogFragment {
                                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                        // Add choice to list of recent choices
                                         datasource.addRecent(results[position][0], results[position][1]);
+                                        // Call listener to open timetable with selected timetable
                                         listener.openTimeTable(results[position][1], results[position][0]);
+                                        // Dismiss current dialog
                                         dismiss();
                                     }
                                 });
 
+                                // This block checks number of items in the listview, if empty show error,
+                                // if one item, choose that automatically.
                                 if(lv.getCount() == 0){
                                     aerror.setVisibility(View.VISIBLE);
                                     abutton.setVisibility(View.VISIBLE);
+                                }else if(lv.getCount() == 1){
+                                    datasource.addRecent(results[0][0], results[0][1]);
+                                    listener.openTimeTable(results[0][1], results[0][0]);
+                                    Toast.makeText(getActivity(), getResources().getString(R.string.sa_auto_pick) + results[0][1], Toast.LENGTH_SHORT).show();
+                                    dismiss();
                                 }
-
                             }
                             @Override
                             public void onFailure(Throwable e, String response){

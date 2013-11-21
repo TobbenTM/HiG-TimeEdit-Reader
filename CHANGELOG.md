@@ -1,5 +1,8 @@
 #HiG TimeEdit Reader
 
+##1.7.2
+* Added 'feature' where if you only get one search result, it picks that
+
 ##1.7.1
 * Fixed bug where list of recent searches reappeared after reopening the app
 * Now checking for invalid search characters

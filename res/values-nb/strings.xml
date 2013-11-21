@@ -20,6 +20,7 @@
     <string name="add_retry_btn">Prøv igjen</string>
     <string name="add_search_hint">Klasse-/Fag-navn</string>
     <string name="add_net_failure">Noe gikk galt!</string>
+    <string name="add_auto_pick">Lager abonnement for: </string>
     <string name="add_field_empty">Vennligst søk etter noe fornuftig</string>
     <string name="add_field_illegal">Ulovlige tegn i søkestreng!</string>
 
@@ -30,6 +31,7 @@
     <string name="welcome_search_btn">Søk</string>
     <string name="welcome_search_hint">Klasse-/Fag-navn</string>
     <string name="welcome_net_failure">Noe gikk galt!</string>
+    <string name="welcome_auto_pick">Lager abonnement for: </string>
     <string name="welcome_field_empty">Vennligst søk etter noe fornuftig</string>
 
     <string name="timetable_today">I dag</string>
@@ -46,6 +48,7 @@
     <string name="sa_retry_btn">Prøv igjen</string>
     <string name="sa_recent_title">Nylig valgt:</string>
     <string name="sa_recent_btn">Fjern historikk</string>
+    <string name="sa_auto_pick">Åpner timeplan for: </string>
     <string name="sa_info_text">I denne visningen kan du se timeplaner for klasser, fag, rom eller forelesere. Disse vil ikke bli lagt til som abonnement.</string>
 
     <string name="about_title">Om</string>

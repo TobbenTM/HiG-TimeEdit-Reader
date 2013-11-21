@@ -167,9 +167,23 @@ public class AddSubFragment extends DialogFragment {
                                     }
                                 });
 
+                                // This block checks number of items in the listview, if empty show error,
+                                // if one item, choose that automatically.
                                 if(lv.getCount() == 0){
                                     aerror.setVisibility(View.VISIBLE);
                                     abutton.setVisibility(View.VISIBLE);
+                                }else if(lv.getCount() == 1){
+                                    datasource = new DSSubscriptions(getActivity());
+                                    try {
+                                        datasource.open();
+                                    } catch (SQLException e) {
+                                        e.printStackTrace();
+                                    }
+                                    datasource.addSubscription(results[0][0], results[0][1]);
+                                    datasource.close();
+                                    listener.readyToUpdate();
+                                    Toast.makeText(getActivity(), getResources().getString(R.string.add_auto_pick) + results[0][1], Toast.LENGTH_SHORT).show();
+                                    dismiss();
                                 }
 
                             }

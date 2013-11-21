@@ -175,8 +175,6 @@ public class WelcomeFragment extends DialogFragment {
                                     lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                         @Override
                                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                            //Log.d("LIST", "List Position: "+position);
-                                            //Log.d("SET", "You have picked: " + results[position][1].toString() + ", ID: " + results[position][0].toString());
                                             datasource = new DSSubscriptions(getActivity());
                                             try {
                                                 datasource.open();
@@ -190,9 +188,23 @@ public class WelcomeFragment extends DialogFragment {
                                         }
                                     });
 
+                                    // This block checks number of items in the listview, if empty show error,
+                                    // if one item, choose that automatically.
                                     if(lv.getCount() == 0){
                                         werror.setVisibility(View.VISIBLE);
                                         wbutton.setVisibility(View.VISIBLE);
+                                    }else if(lv.getCount() == 1){
+                                        datasource = new DSSubscriptions(getActivity());
+                                        try {
+                                            datasource.open();
+                                        } catch (SQLException e) {
+                                            e.printStackTrace();
+                                        }
+                                        datasource.addSubscription(results[0][0], results[0][1]);
+                                        datasource.close();
+                                        listener.readyToUpdate();
+                                        Toast.makeText(getActivity(), getResources().getString(R.string.welcome_auto_pick) + results[0][1], Toast.LENGTH_SHORT).show();
+                                        dismiss();
                                     }
 
                                 }
