@@ -25,9 +25,11 @@ See [CHANGELOG.md](CHANGELOG.md) file
 
 ##TODO:
 
-* Thread DB stuff
+* Implement KitKat transparent notification bar filled with ab color
+* Need message for when there are no upcoming lectures withing the timeframe
+* Merge all search fragments into one
+* Thread DB stuff / optimise lecture listview
 * Hide lectures that are older than today (Might not be needed with autoupdate)
-* Parse, save and show if a lecture has been changed in the last 4 days (html tag)
 * Comment all the code
 * ~~Switch to CSV data source~~
 * ~~Check for invalid characters in search term (![a-zA-Z0-9])~~
