@@ -6,18 +6,22 @@
     -->
     <style name="AppBaseTheme" parent="android:Theme.Holo">
         <item name="android:actionBarStyle">@style/ActionBarTheme</item>
+
+        <item name="android:windowBackground">@color/ab_start</item>
+        <item name="android:windowTranslucentStatus">true</item>
     </style>
 
     <style name="ActionBarTheme" parent="android:Widget.Holo.ActionBar">
-        <item name="android:background">@drawable/actionbar_background</item>
+        <item name="android:background">@color/ab_start</item>
     </style>
 
     <style name="fitsSysWinTheme">
-        <!-- Needed for kitkat styles -->
+        <item name="android:fitsSystemWindows">true</item>
     </style>
 
     <style name="TimeTableList" parent="android:Widget.Holo.ListView">
         <item name="android:listSelector">@android:color/transparent</item>
+        <item name="android:background">@color/list_bg</item>
     </style>
 
 </resources>

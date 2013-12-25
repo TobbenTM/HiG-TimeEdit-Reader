@@ -1,5 +1,8 @@
 #HiG TimeEdit Reader
 
+##1.7.3
+* Styled for KitKat with translucent statusbar for extra bling
+
 ##1.7.2
 * Added 'feature' where if you only get one search result, it picks that
 
