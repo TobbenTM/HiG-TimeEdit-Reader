@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tobbentm.higreader.db.DBHelper;
@@ -30,14 +31,36 @@ public class LectureCursorAdapter extends CursorAdapter {
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
+    private static class ViewHolder{
+        TextView date;
+        TextView name;
+        TextView room;
+        TextView lecturer;
+        TextView time;
+        LinearLayout timeContainer;
+        LinearLayout textContainer;
+    }
+
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
-        return inflater.inflate(R.layout.lecture_list_item, viewGroup, false);
+        View view = inflater.inflate(R.layout.lecture_list_item, viewGroup, false);
+        ViewHolder holder = new ViewHolder();
+        holder.date = (TextView) view.findViewById(R.id.text_date);
+        holder.name = (TextView) view.findViewById(R.id.text_name);
+        holder.room = (TextView) view.findViewById(R.id.text_room);
+        holder.lecturer = (TextView) view.findViewById(R.id.text_lecturer);
+        holder.time = (TextView) view.findViewById(R.id.text_time);
+        holder.timeContainer = (LinearLayout) view.findViewById(R.id.time_container);
+        holder.textContainer = (LinearLayout) view.findViewById(R.id.text_container);
+        view.setTag(holder);
+        return view;
     }
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         //TODO: Optimize this shit, should not be this much work on one list item
+
+        ViewHolder holder = (ViewHolder) view.getTag();
 
         Date date = new Date();
         try {
@@ -56,30 +79,24 @@ public class LectureCursorAdapter extends CursorAdapter {
 
         if(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_NAME)) != null &&
                 cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_NAME)).contains("HIGREADER.newDate") ){
-            view.findViewById(R.id.time_container).setVisibility(View.GONE);
-            view.findViewById(R.id.text_container).setVisibility(View.GONE);
-            TextView tvDate = (TextView) view.findViewById(R.id.text_date);
-            tvDate.setVisibility(View.VISIBLE);
+            holder.timeContainer.setVisibility(View.GONE);
+            holder.textContainer.setVisibility(View.GONE);
+            holder.date.setVisibility(View.VISIBLE);
+            holder.date.setText(currentDate);
 
-            tvDate.setText(currentDate);
             view.setBackgroundResource(R.drawable.list_date_background);
         }else if(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_NAME)) != null &&
                 cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_NAME)).contains("HIGREADER.clear")){
-            view.findViewById(R.id.time_container).setVisibility(View.GONE);
-            view.findViewById(R.id.text_container).setVisibility(View.GONE);
-            TextView tvDate = (TextView) view.findViewById(R.id.text_date);
-            tvDate.setVisibility(View.VISIBLE);
+            holder.timeContainer.setVisibility(View.GONE);
+            holder.textContainer.setVisibility(View.GONE);
+            holder.date.setVisibility(View.VISIBLE);
 
-            tvDate.setText("\t" + cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TIME)).replaceAll("\n", " ") + "\t" + context.getResources().getString(R.string.timetable_clear));
+            holder.date.setText("\t" + cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TIME)).replaceAll("\n", " ") + "\t" + context.getResources().getString(R.string.timetable_clear));
             view.setBackgroundResource(R.drawable.list_clear_background);
         }else{
-            view.findViewById(R.id.text_date).setVisibility(View.GONE);
-            view.findViewById(R.id.time_container).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.text_container).setVisibility(View.VISIBLE);
-            TextView tvName = (TextView) view.findViewById(R.id.text_name);
-            TextView tvRoom = (TextView) view.findViewById(R.id.text_room);
-            TextView tvLecturer = (TextView) view.findViewById(R.id.text_lecturer);
-            TextView tvTime = (TextView) view.findViewById(R.id.text_time);
+            holder.date.setVisibility(View.GONE);
+            holder.timeContainer.setVisibility(View.VISIBLE);
+            holder.textContainer.setVisibility(View.VISIBLE);
 
             String time = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TIME));
             String startTime, endTime;
@@ -102,26 +119,26 @@ public class LectureCursorAdapter extends CursorAdapter {
             }
             long startclk = date.getTime();
 
-            tvName.setText(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_NAME)));
-            tvRoom.setText(context.getResources().getString(R.string.timetable_room) + ":\t\t"+cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ROOM)));
-            tvLecturer.setText(context.getResources().getString(R.string.timetable_lecturer) + ":\t"+cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_LECTURER)));
-            tvTime.setText(time);
+            holder.name.setText(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_NAME)));
+            holder.room.setText(context.getResources().getString(R.string.timetable_room) + ":\t\t" + cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_ROOM)));
+            holder.lecturer.setText(context.getResources().getString(R.string.timetable_lecturer) + ":\t" + cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_LECTURER)));
+            holder.time.setText(time);
             view.setBackgroundResource(R.drawable.list_item_background);
 
             Boolean today = currentDate.contains(context.getResources().getString(R.string.timetable_today));
             if(today &&
                     Integer.parseInt(startTime) <= Integer.parseInt(currenttime) &&
                     Integer.parseInt(endTime) >= Integer.parseInt(currenttime)){
-                tvName.setTextColor(Color.parseColor("#C21B1B"));
+                holder.name.setTextColor(Color.parseColor("#C21B1B"));
             } else if(today &&
                     Integer.parseInt(endTime) < Integer.parseInt(currenttime)){
-                tvName.setTextColor(Color.parseColor("#1ABD1A"));
+                holder.name.setTextColor(Color.parseColor("#1ABD1A"));
             } else if(today &&
                     currentclk < startclk &&
                     currentclk > startclk - (15*60*1000)){
-                tvName.setTextColor(Color.parseColor("#F0B12B"));
+                holder.name.setTextColor(Color.parseColor("#F0B12B"));
             } else {
-                tvName.setTextColor(tvRoom.getCurrentTextColor());
+                holder.name.setTextColor(holder.room.getCurrentTextColor());
             }
         }
     }
