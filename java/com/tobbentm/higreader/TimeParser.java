@@ -34,16 +34,15 @@ public class TimeParser {
                 if(!line[0].contains(currentdate)){
                     endTime = "0800";
                     master.add(dateEntry(line[0]));
-                }else{
-                    if(room){
-                        startTime = line[1].replace(":", "").replace(" ", "");
-                        if( Integer.parseInt(startTime) >= 815 &&
-                                Integer.parseInt(startTime) > Integer.parseInt(endTime)+16 &&
-                                Integer.parseInt(endTime) < 1600 ){
-                            master.add(clearEntry(currentdate, timeString(endTime, startTime)));
-                        }
-                        endTime = line[3].replace(":", "").replace(" ", "");
+                }
+                if(room){
+                    startTime = line[1].replace(":", "").replace(" ", "");
+                    if( Integer.parseInt(startTime) >= 815 &&
+                            Integer.parseInt(startTime) > Integer.parseInt(endTime)+16 &&
+                            Integer.parseInt(endTime) < 1600 ){
+                        master.add(clearEntry(currentdate, timeString(endTime, startTime)));
                     }
+                    endTime = line[3].replace(":", "").replace(" ", "");
                 }
                 ArrayList<String> inner = new ArrayList<String>();
 
