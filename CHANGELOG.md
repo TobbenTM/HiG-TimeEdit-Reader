@@ -1,5 +1,14 @@
 #HiG TimeEdit Reader
 
+##1.7.6
+* Now deleting old lectures at every startup
+
+##1.7.5
+* Bugfix in room view
+
+##1.7.4
+* LectureCursorAdapter optimization
+
 ##1.7.3
 * Styled for KitKat with translucent statusbar for extra bling
 

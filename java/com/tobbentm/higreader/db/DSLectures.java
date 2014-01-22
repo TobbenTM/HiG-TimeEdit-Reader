@@ -84,4 +84,8 @@ public class DSLectures {
         return lecture;
     }
 
+    public void deleteOld(){
+        database.execSQL("DELETE FROM "+DBHelper.TABLE_LECTURES+" WHERE "+DBHelper.COLUMN_DATE+" < date('now')");
+    }
+
 }

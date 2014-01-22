@@ -82,6 +82,7 @@ public class TimeTableFragment extends ListFragment implements PullToRefreshAtta
             e.printStackTrace();
         }
 
+        datasource.deleteOld();
         Cursor cursor = datasource.getLecturesCursor();
         //getActivity().startManagingCursor(cursor); //Just caused bugs, hacked around it in onResume and onPause
 

@@ -3,8 +3,8 @@
 Play store link: https://play.google.com/store/apps/details?id=com.tobbentm.higreader
 
 Currently in stage: 
-* Prod: 1.7.2
-* Beta: 1.7.3
+* Prod: 1.7.6
+* Beta: 1.7.6
 
 ![Icon](http://tobbentm.com/ul/HiG-Reader_Icon.png "App Icon")
 
@@ -28,8 +28,8 @@ See [CHANGELOG.md](CHANGELOG.md) file
 * Need message for when there are no upcoming lectures withing the timeframe
 * Merge all search fragments into one
 * Thread DB stuff / optimise lecture listview
-* Hide lectures that are older than today (Might not be needed with autoupdate)
 * Comment all the code
+* ~~Hide lectures that are older than today (Might not be needed with autoupdate)~~
 * ~~Implement KitKat transparent notification bar filled with ab color~~
 * ~~Switch to CSV data source~~
 * ~~Check for invalid characters in search term (![a-zA-Z0-9])~~
