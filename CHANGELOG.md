@@ -1,5 +1,8 @@
 #HiG TimeEdit Reader
 
+##1.8
+* Added homescreen (and keyguard) widgets
+
 ##1.7.6
 * Now deleting old lectures at every startup
 

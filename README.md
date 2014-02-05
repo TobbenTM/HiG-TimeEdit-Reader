@@ -4,7 +4,7 @@ Play store link: https://play.google.com/store/apps/details?id=com.tobbentm.higr
 
 Currently in stage: 
 * Prod: 1.7.6
-* Beta: 1.7.6
+* Beta: 1.8
 
 ![Icon](http://tobbentm.com/ul/HiG-Reader_Icon.png "App Icon")
 
@@ -28,6 +28,7 @@ See [CHANGELOG.md](CHANGELOG.md) file
 * Need message for when there are no upcoming lectures withing the timeframe
 * Merge all search fragments into one
 * Thread DB stuff / optimise lecture listview
+* Abstract lecture updating
 * Comment all the code
 * ~~Hide lectures that are older than today (Might not be needed with autoupdate)~~
 * ~~Implement KitKat transparent notification bar filled with ab color~~
