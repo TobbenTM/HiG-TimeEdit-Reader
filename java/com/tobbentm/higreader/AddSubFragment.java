@@ -56,7 +56,7 @@ public class AddSubFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        CustomDialogBuilder builder = new CustomDialogBuilder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_add_subs, null);
 
@@ -65,7 +65,7 @@ public class AddSubFragment extends DialogFragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
-        builder.setView(view)
+        builder.setCustomView(view)
                 .setTitle(getResources().getString(R.string.add_title))
                 .setNeutralButton(getResources().getString(R.string.add_search_btn), new DialogInterface.OnClickListener() {
                     @Override
