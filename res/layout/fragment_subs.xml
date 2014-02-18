@@ -11,14 +11,6 @@
 
     <View android:layout_height="1dp"
         android:layout_width="fill_parent"
-        android:background="#90AAAAAA"/>
-
-    <Button
-        android:id="@+id/subs_add_btn"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/subs_add"
-        android:onClick="subAdd"
-        style="@android:style/Widget.Holo.Button.Borderless"/>
+        android:background="@color/hr_main"/>
 
 </LinearLayout>

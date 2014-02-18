@@ -39,6 +39,7 @@
     <string name="timetable_title">Timeplan</string>
     <string name="timetable_no_update">Kunne ikke oppdatere.\nVennligst sjekk din nettverkstilkobling.</string>
     <string name="timetable_room">Rom</string>
+    <string name="timetable_week">Uke\t</string>
     <string name="timetable_lecturer">Foreleser</string>
     <string name="timetable_update_error">Klarte ikke å oppdatere timeplan</string>
 
@@ -46,7 +47,7 @@
     <string name="sa_search_btn">Søk</string>
     <string name="sa_search_hint">Søk</string>
     <string name="sa_retry_btn">Prøv igjen</string>
-    <string name="sa_recent_title">Nylig valgt:</string>
+    <string name="sa_recent_title">Nylige</string>
     <string name="sa_recent_btn">Fjern historikk</string>
     <string name="sa_auto_pick">Åpner timeplan for: </string>
     <string name="sa_info_text">I denne visningen kan du se timeplaner for klasser, fag, rom eller forelesere. Disse vil ikke bli lagt til som abonnement.</string>
@@ -60,6 +61,7 @@
     <string name="pull_to_refresh_release_label">Slipp for å oppdatere…</string>
     <string name="pull_to_refresh_refreshing_label">Oppdaterer timeplan…</string>
 
+    <string name="widget_uknown_error">Ukjent feil, prøv å åpne appen.</string>
 
     <string-array name="search_array">
         <item>Klasse</item>

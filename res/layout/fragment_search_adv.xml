@@ -55,6 +55,7 @@
 
         <TextView
             android:id="@+id/sa_recent_title"
+            android:drawableLeft="@drawable/device_access_time"
             android:layout_gravity="center_vertical"
             android:paddingLeft="15dp"
             android:layout_height="wrap_content"

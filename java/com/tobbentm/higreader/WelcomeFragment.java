@@ -57,7 +57,7 @@ public class WelcomeFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         //Dialog builder
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        CustomDialogBuilder builder = new CustomDialogBuilder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_welcome, null); //Create view finding views
 
@@ -68,7 +68,7 @@ public class WelcomeFragment extends DialogFragment {
         spinner.setAdapter(adapter);
 
         //Builder for dialog
-        builder.setView(view)
+        builder.setCustomView(view)
                 .setTitle(getResources().getString(R.string.welcome_title))
                 .setNeutralButton(getResources().getString(R.string.welcome_search_btn), new DialogInterface.OnClickListener() {
                     @Override

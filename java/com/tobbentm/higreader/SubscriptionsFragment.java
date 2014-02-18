@@ -28,6 +28,7 @@ public class SubscriptionsFragment extends DialogFragment {
     private readyToUpdateListener listener;
     private boolean update = false;
     private SubsCursorAdapter adapter;
+    private Activity act;
 
     public SubscriptionsFragment(){}
 
@@ -43,6 +44,7 @@ public class SubscriptionsFragment extends DialogFragment {
         }catch (ClassCastException e){
             throw new ClassCastException(activity.toString());
         }
+        this.act = activity;
     }
 
     @Override
@@ -56,13 +58,25 @@ public class SubscriptionsFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState){
 
         //Dialog builder
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        CustomDialogBuilder builder = new CustomDialogBuilder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_subs, null);
 
-        builder.setView(view)
+        builder.setCustomView(view)
                 .setTitle(getResources().getString(R.string.subs_title))
-                .setNeutralButton(getResources().getString(R.string.subs_close_btn), new DialogInterface.OnClickListener() {
+                .setAction(R.drawable.content_new, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ((MainActivity)act).subAdd();
+                    }
+                })
+                .setPositiveButton(R.string.subs_add, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ((MainActivity)act).subAdd();
+                    }
+                })
+                .setNegativeButton(getResources().getString(R.string.subs_close_btn), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 

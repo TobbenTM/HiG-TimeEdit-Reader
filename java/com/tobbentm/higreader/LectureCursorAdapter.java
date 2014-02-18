@@ -14,6 +14,7 @@ import com.tobbentm.higreader.db.DBHelper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -33,6 +34,7 @@ public class LectureCursorAdapter extends CursorAdapter {
 
     private static class ViewHolder{
         TextView date;
+        TextView week;
         TextView name;
         TextView room;
         TextView lecturer;
@@ -46,6 +48,7 @@ public class LectureCursorAdapter extends CursorAdapter {
         View view = inflater.inflate(R.layout.lecture_list_item, viewGroup, false);
         ViewHolder holder = new ViewHolder();
         holder.date = (TextView) view.findViewById(R.id.text_date);
+        holder.week = (TextView) view.findViewById(R.id.text_week);
         holder.name = (TextView) view.findViewById(R.id.text_name);
         holder.room = (TextView) view.findViewById(R.id.text_room);
         holder.lecturer = (TextView) view.findViewById(R.id.text_lecturer);
@@ -73,6 +76,10 @@ public class LectureCursorAdapter extends CursorAdapter {
 
         String currentDate = newDate.format(date);
 
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int weeknr = cal.get(Calendar.WEEK_OF_YEAR);
+
         if(currentDate.contains(newDate.format(new Date()))){
             currentDate = context.getResources().getString(R.string.timetable_today);
         }
@@ -84,17 +91,22 @@ public class LectureCursorAdapter extends CursorAdapter {
             holder.date.setVisibility(View.VISIBLE);
             holder.date.setText(currentDate);
 
+            holder.week.setVisibility(View.VISIBLE);
+            holder.week.setText(context.getString(R.string.timetable_week)+weeknr);
+
             view.setBackgroundResource(R.drawable.list_date_background);
         }else if(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_NAME)) != null &&
                 cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_NAME)).contains("HIGREADER.clear")){
             holder.timeContainer.setVisibility(View.GONE);
             holder.textContainer.setVisibility(View.GONE);
+            holder.week.setVisibility(View.GONE);
             holder.date.setVisibility(View.VISIBLE);
 
             holder.date.setText("\t" + cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_TIME)).replaceAll("\n", " ") + "\t" + context.getResources().getString(R.string.timetable_clear));
             view.setBackgroundResource(R.drawable.list_clear_background);
         }else{
             holder.date.setVisibility(View.GONE);
+            holder.week.setVisibility(View.GONE);
             holder.timeContainer.setVisibility(View.VISIBLE);
             holder.textContainer.setVisibility(View.VISIBLE);
 

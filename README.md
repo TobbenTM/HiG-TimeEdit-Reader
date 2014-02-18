@@ -3,8 +3,8 @@
 Play store link: https://play.google.com/store/apps/details?id=com.tobbentm.higreader
 
 Currently in stage: 
-* Prod: 1.7.6
-* Beta: 1.8
+* Prod: 1.8.1
+* Beta: 1.8.1
 
 ![Icon](http://tobbentm.com/ul/HiG-Reader_Icon.png "App Icon")
 
@@ -14,6 +14,15 @@ Currently in stage:
 * android-async-http from loopj
 * ActionBar-PullToRefresh from chrisbanes
 * OpenCSV from opencsv.sourceforge.net
+
+##Porting
+
+Want to port this to your institution of choice?
+
+2 Options:
+
+* Use my [TimeEdit Reader](https://play.google.com/store/apps/details?id=com.tobbentm.timeeditreader) app, which currently supports 45 different institutions.
+* See the [PORTING.md](PORTING.md) file.
 
 ##License:
 
@@ -25,40 +34,18 @@ See [CHANGELOG.md](CHANGELOG.md) file
 
 ##TODO:
 
+* Create PORTING.md guide to porting this app
+* Make the homescreen widget able to fetch timetable from timeedit
+* Update screenshots with new sexy dialogs
 * Need message for when there are no upcoming lectures withing the timeframe
 * Merge all search fragments into one
-* Thread DB stuff / optimise lecture listview
-* Abstract lecture updating
 * Comment all the code
-* ~~Hide lectures that are older than today (Might not be needed with autoupdate)~~
-* ~~Implement KitKat transparent notification bar filled with ab color~~
-* ~~Switch to CSV data source~~
-* ~~Check for invalid characters in search term (![a-zA-Z0-9])~~
-* ~~Implement pull to refresh on timetable listview~~
-* ~~Remove progressbar in timetable, and instead add it to actionbar(?)~~
-* ~~Update timetable after user removes a subscription~~
-* ~~Add room/lecturer view (separate from timetable)~~
-* ~~Create new icon~~
-* ~~Autoupdate at intervals and after initial welcome dialog~~
-* ~~Remove unneeded permissions (Storage R/W)~~
-* ~~Translate to Norwegian~~
-* ~~Updating uses too much bandwidth, set intervalls to update~~
+* ~~Thread DB stuff / optimise lecture listview~~
+* ~~Abstract lecture updating~~
 
 ##Known bugs:
 
 * Somewhat slow when closing the app, might need some optimizing
-* ~~Crashes when searching with invalid URL characters~~
-* ~~Would crash when network failed after closing app~~
-* ~~Unable to get correct timetable when subscribing to class AND course~~
-* ~~ANR when updating, then immediately switching network mode (from mobile to wifi for examle)~~
-* ~~Samsung Note unable to properly parse date, causing app to display all dates as "Today"~~
-* ~~Unable to parse time correctly between 00.00 and 01.00 at night~~
-* ~~ANR when closing app directly after updating~~
-
-##Known problems
-
-* ~~TimeEdit HTML is really bloated, with a least ~1.3k lines. Not much to do about it. Translates to about 250kB for each update.~~
-	* ~~Will possibly be fixed with CSV datasource~~
 
 ##Screens
 

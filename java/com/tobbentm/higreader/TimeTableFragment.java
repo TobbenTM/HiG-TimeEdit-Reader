@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.tobbentm.higreader.db.DBHelper;
 import com.tobbentm.higreader.db.DBSubscriptions;
+import com.tobbentm.higreader.db.DBUpdate;
 import com.tobbentm.higreader.db.DSLectures;
 import com.tobbentm.higreader.db.DSSettings;
 import com.tobbentm.higreader.db.DSSubscriptions;
@@ -160,18 +161,27 @@ public class TimeTableFragment extends ListFragment implements PullToRefreshAtta
                 if(datasource.isOpen()){
                     if(response != null && response.length() > 0){
                         errortv.setVisibility(View.GONE);
-                        String[][] result = TimeParser.timetable(response, false);
-
-                        helper.truncate(helper.getWritableDatabase(), DBHelper.TABLE_LECTURES);
-                        for(String[] arr : result){
-                            datasource.addLecture(arr[2], arr[3], arr[4], arr[0], arr[1]);
-                        }
-
-                        adapter.changeCursor(datasource.getLecturesCursor());
-                        adapter.notifyDataSetChanged();
-                        Long time = date.getTime();
-                        settingsDatasource.updateSetting(DBHelper.SETTING_LASTUPDATED, time.toString());
-                        ptra.setRefreshComplete();
+                        DBUpdate update = new DBUpdate(getActivity(), response,
+                                false, false, new DBDoneCallback() {
+                            @Override
+                            public void DBDone(Cursor cursor) {
+                                if(getActivity() != null && !cursor.isClosed()){
+                                    if(!datasource.isOpen())
+                                        try {
+                                            datasource.open();
+                                            settingsDatasource.open();
+                                        } catch (SQLException e) {
+                                            e.printStackTrace();
+                                        }
+                                    adapter.changeCursor(cursor);
+                                    adapter.notifyDataSetChanged();
+                                    Long time = date.getTime();
+                                    settingsDatasource.updateSetting(DBHelper.SETTING_LASTUPDATED, time.toString());
+                                    ptra.setRefreshComplete();
+                                }
+                            }
+                        });
+                        update.execute();
                     }else{
                         if(adapter.isEmpty())
                             errortv.setVisibility(View.VISIBLE);

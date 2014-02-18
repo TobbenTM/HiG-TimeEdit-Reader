@@ -1,5 +1,11 @@
 #HiG TimeEdit Reader
 
+##1.8.1
+* Widget bugfix (where one would not update)
+* Added week-numbers in timetables
+* Styled dialogs (very sexy)
+* All TimeTable db-related IO in asynctasks
+
 ##1.8
 * Added homescreen (and keyguard) widgets
 

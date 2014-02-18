@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -24,6 +25,7 @@ public class WidgetProvider extends AppWidgetProvider {
             views = updateWidgetListView(context, appWidgetId);
 
             appWidgetManager.updateAppWidget(appWidgetId, views);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_list);
         }
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
@@ -32,6 +34,7 @@ public class WidgetProvider extends AppWidgetProvider {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
         Intent svcIntent = new Intent(context, WidgetService.class);
         svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        svcIntent.setData(Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME)));
 
         Intent mainIntent = new Intent(context, MainActivity.class);
         PendingIntent penIntent = PendingIntent.getActivity(context, 0, mainIntent, 0);

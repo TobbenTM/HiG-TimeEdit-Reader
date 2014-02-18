@@ -72,7 +72,7 @@ public class SearchAdvFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        CustomDialogBuilder builder = new CustomDialogBuilder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_search_adv, null);
 
@@ -81,8 +81,9 @@ public class SearchAdvFragment extends DialogFragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
-        builder.setView(view)
+        builder.setCustomView(view)
                 .setTitle(getResources().getString(R.string.sa_title))
+                .setIcon(R.drawable.action_search)
                 .setNeutralButton(getResources().getString(R.string.sa_search_btn), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

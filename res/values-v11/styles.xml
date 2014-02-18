@@ -9,7 +9,8 @@
     </style>
 
     <style name="ActionBarTheme" parent="android:Widget.Holo.ActionBar">
-        <item name="android:background">@drawable/actionbar_background</item>
+        <item name="android:background">@color/hr_main</item>
+        <item name="android:icon">@drawable/ic_action_abicon</item>
     </style>
 
     <style name="fitsSysWinTheme">

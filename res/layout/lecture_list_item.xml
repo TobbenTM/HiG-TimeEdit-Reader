@@ -62,10 +62,21 @@
         android:id="@+id/text_date"
         android:visibility="gone"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:singleLine="true"
         android:paddingLeft="30dp"
         android:textSize="20sp"
+        android:layout_weight="1"
         android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/text_week"
+        android:visibility="gone"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:singleLine="true"
+        android:gravity="center_vertical"
+        android:textSize="18sp"
+        android:paddingRight="15dp" />
 
 </LinearLayout>

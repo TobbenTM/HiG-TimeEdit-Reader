@@ -19,7 +19,7 @@ public class AboutFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        CustomDialogBuilder builder = new CustomDialogBuilder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_about, null);
         TextView textV = (TextView) view.findViewById(R.id.about_text);
@@ -31,8 +31,9 @@ public class AboutFragment extends DialogFragment {
             e.printStackTrace();
         }
         textV.setText(text);
-        builder.setView(view)
+        builder.setCustomView(view)
                 .setTitle(getResources().getString(R.string.about_title))
+                .setIcon(R.drawable.action_about)
                 .setNeutralButton(getResources().getString(R.string.about_close_btn), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

@@ -39,4 +39,7 @@
     <color name="widget_bg">
         #55000000
     </color>
+    <color name="hr_main">
+        #3E8BB1
+    </color>
 </resources>

@@ -176,7 +176,7 @@ public class MainActivity extends Activity implements
         saFragment.getDialog().dismiss();
     }
 
-    public void subAdd(View view){
+    public void subAdd(){
         // onClick function from subscriptionsdialog
         subsFragment.getDialog().dismiss();
         showAddDialog();

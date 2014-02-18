@@ -8,7 +8,9 @@ import android.widget.RemoteViewsService;
 
 import com.tobbentm.higreader.R;
 import com.tobbentm.higreader.db.DBLectures;
+import com.tobbentm.higreader.db.DSLectures;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -71,7 +73,15 @@ public class WidgetRVFactory implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public void onDataSetChanged() {
-
+        DSLectures datasource = new DSLectures(ctx);
+        try {
+            datasource.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        datasource.deleteOld();
+        list = datasource.getLectures();
+        datasource.close();
     }
 
     @Override

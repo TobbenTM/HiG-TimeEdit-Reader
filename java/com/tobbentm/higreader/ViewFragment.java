@@ -16,7 +16,8 @@ import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.tobbentm.higreader.db.DBHelper;
-import com.tobbentm.higreader.db.DSLecTemp;
+import com.tobbentm.higreader.db.DBUpdate;
+import com.tobbentm.higreader.db.DSLectures;
 
 import java.sql.SQLException;
 
@@ -30,7 +31,7 @@ public class ViewFragment extends ListFragment implements PullToRefreshAttacher.
     TextView errortv;
     String id, name;
     DBHelper helper;
-    DSLecTemp datasource;
+    DSLectures datasource;
     private PullToRefreshAttacher ptra;
     private boolean room = false;
     private LectureCursorAdapter adapter;
@@ -55,7 +56,7 @@ public class ViewFragment extends ListFragment implements PullToRefreshAttacher.
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        datasource = new DSLecTemp(getActivity());
+        datasource = new DSLectures(getActivity(), DBHelper.TABLE_TEMP_LECTURES);
         helper = new DBHelper(getActivity());
         ActionBar ab = getActivity().getActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
@@ -134,16 +135,25 @@ public class ViewFragment extends ListFragment implements PullToRefreshAttacher.
                         errortv.setVisibility(View.GONE);
                         if(id.contains(".185"))
                             room = true;
-                        String[][] result = TimeParser.timetable(response, room);
 
-                        helper.truncate(helper.getWritableDatabase(), DBHelper.TABLE_TEMP_LECTURES);
-                        for(String[] arr : result){
-                            datasource.addLecture(arr[2], arr[3], arr[4], arr[0], arr[1]);
-                        }
-
-                        adapter.changeCursor(datasource.getLecturesCursor());
-                        adapter.notifyDataSetChanged();
-                        ptra.setRefreshComplete();
+                        DBUpdate update = new DBUpdate(getActivity(), response, true, room, new DBDoneCallback() {
+                            @Override
+                            public void DBDone(Cursor cursor) {
+                                if(getActivity() != null && !cursor.isClosed()){
+                                    if(!datasource.isOpen()){
+                                        try {
+                                            datasource.open();
+                                        } catch (SQLException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                    adapter.changeCursor(cursor);
+                                    adapter.notifyDataSetChanged();
+                                    ptra.setRefreshComplete();
+                                }
+                            }
+                        });
+                        update.execute();
                     }else{
                         if(adapter.isEmpty())
                             errortv.setVisibility(View.VISIBLE);

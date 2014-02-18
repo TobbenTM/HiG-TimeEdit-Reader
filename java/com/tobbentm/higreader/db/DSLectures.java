@@ -27,11 +27,18 @@ public class DSLectures {
 
     private SQLiteDatabase database;
     private DBHelper helper;
+    private String table;
     private String[] allColumns = {DBHelper.COLUMN_DB_ID, DBHelper.COLUMN_LECTURE_ID, DBHelper.COLUMN_NAME
         , DBHelper.COLUMN_ROOM, DBHelper.COLUMN_LECTURER, DBHelper.COLUMN_DATE, DBHelper.COLUMN_TIME};
 
     public DSLectures(Context context){
         helper = new DBHelper(context);
+        this.table = DBHelper.TABLE_LECTURES;
+    }
+
+    public DSLectures(Context context, String table){
+        helper = new DBHelper(context);
+        this.table = table;
     }
 
     public void open() throws SQLException{
@@ -47,7 +54,7 @@ public class DSLectures {
     }
 
     public void addLecture(String name, String room, String lecturer, String date, String time){
-        String query = "INSERT INTO lectures('name','room','lecturer','date','time')"
+        String query = "INSERT INTO "+table+"('name','room','lecturer','date','time')"
                 + "VALUES('"+name+"','"+room+"','"+lecturer+"','"+date+"','"+time+"');";
         //Log.d("DATABASE", query);
         database.execSQL(query);
@@ -55,7 +62,7 @@ public class DSLectures {
 
     public List<DBLectures> getLectures(){
         List<DBLectures> lectures = new ArrayList<DBLectures>();
-        Cursor cursor = database.query(DBHelper.TABLE_LECTURES, allColumns, null, null, null, null, null);
+        Cursor cursor = database.query(table, allColumns, null, null, null, null, null);
 
         cursor.moveToFirst();
         while(!cursor.isAfterLast()){
@@ -69,7 +76,7 @@ public class DSLectures {
     }
 
     public Cursor getLecturesCursor(){
-        return database.query(DBHelper.TABLE_LECTURES, allColumns, null, null, null, null, null);
+        return database.query(table, allColumns, null, null, null, null, null);
     }
 
     public DBLectures cursorToLecture(Cursor cursor){
@@ -85,7 +92,7 @@ public class DSLectures {
     }
 
     public void deleteOld(){
-        database.execSQL("DELETE FROM "+DBHelper.TABLE_LECTURES+" WHERE "+DBHelper.COLUMN_DATE+" < date('now')");
+        database.execSQL("DELETE FROM "+table+" WHERE "+DBHelper.COLUMN_DATE+" < date('now')");
     }
 
 }

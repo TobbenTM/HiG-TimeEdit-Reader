@@ -39,6 +39,7 @@
     <string name="timetable_title">Timetable</string>
     <string name="timetable_no_update">Unable to update.\nPlease check your network connection.</string>
     <string name="timetable_room">Room</string>
+    <string name="timetable_week">Week\t</string>
     <string name="timetable_lecturer">Lecturer</string>
     <string name="timetable_update_error">Could not update timetable.</string>
 
@@ -46,7 +47,7 @@
     <string name="sa_search_btn">Search</string>
     <string name="sa_search_hint">Search</string>
     <string name="sa_retry_btn">Retry</string>
-    <string name="sa_recent_title">Recent:</string>
+    <string name="sa_recent_title">Recent</string>
     <string name="sa_recent_btn">Clear history</string>
     <string name="sa_auto_pick">Opening timetable for: </string>
     <string name="sa_info_text">In this view you may search for room, lecturer, class or course. These will not be added to your subscriptions.</string>
