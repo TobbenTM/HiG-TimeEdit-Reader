@@ -161,11 +161,12 @@ public class TimeTableFragment extends ListFragment implements PullToRefreshAtta
                 if(datasource.isOpen()){
                     if(response != null && response.length() > 0){
                         errortv.setVisibility(View.GONE);
+
                         DBUpdate update = new DBUpdate(getActivity(), response,
                                 false, false, new DBDoneCallback() {
                             @Override
-                            public void DBDone(Cursor cursor) {
-                                if(getActivity() != null && !cursor.isClosed()){
+                            public void DBDone() {
+                                if(getActivity() != null){
                                     if(!datasource.isOpen())
                                         try {
                                             datasource.open();
@@ -173,6 +174,7 @@ public class TimeTableFragment extends ListFragment implements PullToRefreshAtta
                                         } catch (SQLException e) {
                                             e.printStackTrace();
                                         }
+                                    Cursor cursor = datasource.getLecturesCursor();
                                     adapter.changeCursor(cursor);
                                     adapter.notifyDataSetChanged();
                                     Long time = date.getTime();

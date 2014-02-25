@@ -51,7 +51,7 @@
         android:visibility="gone"
         android:layout_width="fill_parent"
         android:id="@+id/sa_recent_title_container"
-        android:background="@drawable/recent_background">
+        android:background="@color/hr_main">
 
         <TextView
             android:id="@+id/sa_recent_title"

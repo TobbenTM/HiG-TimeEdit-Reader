@@ -138,8 +138,8 @@ public class ViewFragment extends ListFragment implements PullToRefreshAttacher.
 
                         DBUpdate update = new DBUpdate(getActivity(), response, true, room, new DBDoneCallback() {
                             @Override
-                            public void DBDone(Cursor cursor) {
-                                if(getActivity() != null && !cursor.isClosed()){
+                            public void DBDone() {
+                                if(getActivity() != null){
                                     if(!datasource.isOpen()){
                                         try {
                                             datasource.open();
@@ -147,6 +147,7 @@ public class ViewFragment extends ListFragment implements PullToRefreshAttacher.
                                             e.printStackTrace();
                                         }
                                     }
+                                    Cursor cursor = datasource.getLecturesCursor();
                                     adapter.changeCursor(cursor);
                                     adapter.notifyDataSetChanged();
                                     ptra.setRefreshComplete();

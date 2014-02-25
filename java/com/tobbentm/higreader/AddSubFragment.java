@@ -89,7 +89,7 @@ public class AddSubFragment extends DialogFragment {
         final TextView aerror = (TextView)dialog.findViewById(R.id.aerror_text);
         final Button abutton = (Button)dialog.findViewById(R.id.add_nores_button);
 
-        final Button neutButton = (Button) dialog.getButton(Dialog.BUTTON_NEUTRAL);
+        final Button neutButton = dialog.getButton(Dialog.BUTTON_NEUTRAL);
 
         et.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
