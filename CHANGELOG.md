@@ -1,5 +1,8 @@
 #HiG TimeEdit Reader
 
+##1.8.2
+* Fixes Issue #3 - FC after asynctask
+
 ##1.8.1
 * Widget bugfix (where one would not update)
 * Added week-numbers in timetables
