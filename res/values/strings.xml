@@ -61,6 +61,8 @@
     <string name="pull_to_refresh_release_label">Release to refresh…</string>
     <string name="pull_to_refresh_refreshing_label">Refreshing timetable…</string>
 
+    <string name="reserv_title">Reservations</string>
+
     <string name="widget_uknown_error">Uknown error. Try opening the app.</string>
 
     <string-array name="search_array">

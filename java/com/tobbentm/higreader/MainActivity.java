@@ -3,6 +3,8 @@ package com.tobbentm.higreader;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,13 +31,14 @@ public class MainActivity extends Activity implements
     WelcomeFragment welcomeFragment;
     ViewFragment viewFragment;
     private PullToRefreshAttacher ptra;
-    private DBHelper dbhelper = new DBHelper(this);
+    private DBHelper dbhelper;
     private DSSubscriptions subscriptionsDatasource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        dbhelper = DBHelper.getInstance(this);
         subscriptionsDatasource = new DSSubscriptions(this);
 
         try {
@@ -54,36 +57,25 @@ public class MainActivity extends Activity implements
         // Checking if there is no subscriptions (first time)
         if(subscriptionsDatasource.getSize() == 0){
             dbTruncate();
+            dbhelper.truncate(dbhelper.getWritableDatabase(), DBHelper.TABLE_LECTURES);
             showWelcomeDialog();
             showTimeTable();
         }else{
             showTimeTable();
         }
-    }
 
-    @Override
-    protected void onPause(){
-        super.onPause();
-        subscriptionsDatasource.close();
-    }
-
-    @Override
-    protected void onResume(){
-        super.onResume();
-        try {
-            subscriptionsDatasource.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     // Fragment transaction for TimeTableFragment
     private void showTimeTable(){
-        findViewById(R.id.activity_pb).setVisibility(View.GONE);
-        timeTableFragment = new TimeTableFragment();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.activity_frame, timeTableFragment, "fragment_timetable");
-        ft.commit();
+        // If fragment is not null, we will not add it another time
+        if(fm.findFragmentByTag("fragment_timetable") == null){
+            findViewById(R.id.activity_pb).setVisibility(View.GONE);
+            timeTableFragment = new TimeTableFragment();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.replace(R.id.activity_frame, timeTableFragment, "fragment_timetable");
+            ft.commit();
+        }
     }
 
     // Fragment transaction for ViewFragment
@@ -143,6 +135,9 @@ public class MainActivity extends Activity implements
             case R.id.action_subs:
                 showSubsDialog();
                 return true;
+            case R.id.action_reserv:
+                openReservationsURL();
+                return true;
             case R.id.action_about:
                 showAboutDialog();
                 return true;
@@ -152,6 +147,14 @@ public class MainActivity extends Activity implements
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    // Simple function to open browser
+    // with URL to timeedit room reservations
+    private void openReservationsURL() {
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse("http://web.timeedit.se/hig_no/db1/timeedit/sso/?ssoserver=feide&student"));
+        startActivity(i);
     }
 
     private void dbTruncate(){
@@ -194,6 +197,7 @@ public class MainActivity extends Activity implements
         showViewFragment(name, ttid);
     }
 
+    // Getter for pulltorefreshattacher
     public PullToRefreshAttacher getPtra(){
         // Getter for pulltorefreshattacher
         return ptra;

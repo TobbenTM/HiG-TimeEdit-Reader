@@ -2,7 +2,6 @@ package com.tobbentm.higreader;
 
 import android.app.ActionBar;
 import android.app.ListFragment;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,11 +14,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.tobbentm.higreader.db.DBHelper;
-import com.tobbentm.higreader.db.DBUpdate;
-import com.tobbentm.higreader.db.DSLectures;
+import com.tobbentm.higreader.db.DBLectures;
 
-import java.sql.SQLException;
+import java.util.ArrayList;
 
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 
@@ -30,11 +27,10 @@ public class ViewFragment extends ListFragment implements PullToRefreshAttacher.
 
     TextView errortv;
     String id, name;
-    DBHelper helper;
-    DSLectures datasource;
+    private DBLectures[] lectures;
     private PullToRefreshAttacher ptra;
     private boolean room = false;
-    private LectureCursorAdapter adapter;
+    private LectureArrayAdapter adapter;
 
     public ViewFragment(String name, String id){
         this.name = name;
@@ -56,28 +52,41 @@ public class ViewFragment extends ListFragment implements PullToRefreshAttacher.
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        datasource = new DSLectures(getActivity(), DBHelper.TABLE_TEMP_LECTURES);
-        helper = new DBHelper(getActivity());
+
+        // savedInstanceState is not null if this fragment has existed before,
+        // and if it has this will get name, id and lectures from last time
+        if(savedInstanceState != null){
+            this.name = savedInstanceState.getString("name");
+            this.id = savedInstanceState.getString("id");
+            this.lectures = (DBLectures[]) savedInstanceState.getParcelableArray("lectures");
+        }
+
+        // ActionBar stuff, custom title for ViewFragment (whatever you are searching for)
         ActionBar ab = getActivity().getActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setHomeButtonEnabled(true);
         ab.setTitle(this.name);
 
-        //Log.d("FRAG", "Opening datasources");
-        try {
-            datasource.open();
-        } catch (SQLException e) {
-            //Log.d("ERROR", "SQException in TimeTableFragment onActivityCreated");
-            e.printStackTrace();
-        }
-
-        helper.truncate(helper.getWritableDatabase(), DBHelper.TABLE_TEMP_LECTURES);
-        Cursor cursor = datasource.getLecturesCursor();
-        //getActivity().startManagingCursor(cursor); //Just caused bugs, hacked around it in onResume and onPause
-
-        adapter = new LectureCursorAdapter(getActivity(), cursor, 0);
+        // Adapter init
+        adapter = new LectureArrayAdapter(getActivity(), android.R.id.list, new ArrayList<DBLectures>());
         setListAdapter(adapter);
-        updateLectures();
+
+        // If list of lectures is null or empty; download timetable,
+        // else just use what's stored
+        if(this.lectures==null || this.lectures.length == 0)
+            updateLectures();
+        else
+            adapter.notifyDataSetChanged(lectures);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle state) {
+        // Generating a state bundle to preserve variables and lecture
+        // array across configuration changes etc
+        state.putString("name", this.name);
+        state.putString("id", this.id);
+        state.putParcelableArray("lectures", this.lectures);
+        super.onSaveInstanceState(state);
     }
 
     @Override
@@ -101,26 +110,6 @@ public class ViewFragment extends ListFragment implements PullToRefreshAttacher.
     public void onListItemClick(ListView l, View v, int position, long id) {
     }
 
-    @Override
-    public void onPause(){
-        super.onPause();
-        datasource.close();
-        adapter.notifyDataSetInvalidated();
-        adapter.changeCursor(null);
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        try {
-            datasource.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        adapter.changeCursor(datasource.getLecturesCursor());
-        adapter.notifyDataSetChanged();
-    }
-
     public void updateLectures(){
         ptra.setRefreshing(true);
         id += ",-1,1.182";
@@ -130,45 +119,26 @@ public class ViewFragment extends ListFragment implements PullToRefreshAttacher.
         Network.timetable(id, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(String response) {
-                if(datasource.isOpen()){
-                    if(response != null && response.length() > 0){
-                        errortv.setVisibility(View.GONE);
-                        if(id.contains(".185"))
-                            room = true;
+                if (response != null && response.length() > 0) {
+                    errortv.setVisibility(View.GONE);
+                    if (id.contains(".185"))
+                        room = true;
 
-                        DBUpdate update = new DBUpdate(getActivity(), response, true, room, new DBDoneCallback() {
-                            @Override
-                            public void DBDone() {
-                                if(getActivity() != null){
-                                    if(!datasource.isOpen()){
-                                        try {
-                                            datasource.open();
-                                        } catch (SQLException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                    Cursor cursor = datasource.getLecturesCursor();
-                                    adapter.changeCursor(cursor);
-                                    adapter.notifyDataSetChanged();
-                                    ptra.setRefreshComplete();
-                                }
-                            }
-                        });
-                        update.execute();
-                    }else{
-                        if(adapter.isEmpty())
-                            errortv.setVisibility(View.VISIBLE);
-                        else
-                            Toast.makeText(getActivity(), getResources().getString(R.string.timetable_update_error), Toast.LENGTH_SHORT).show();
-                        onFailure(null, null);
-                    }
+                    httpFinished(response);
+                } else {
+                    if (adapter.isEmpty())
+                        errortv.setVisibility(View.VISIBLE);
+                    else
+                        Toast.makeText(getActivity(), getResources().getString(R.string.timetable_update_error), Toast.LENGTH_SHORT).show();
+                    onFailure(null, null);
                 }
             }
+
             @Override
-            public void onFailure(Throwable e, String response){
-                if(isAdded() && datasource.isOpen()){
+            public void onFailure(Throwable e, String response) {
+                if (isAdded()) {
                     ptra.setRefreshComplete();
-                    if(adapter.isEmpty())
+                    if (adapter.isEmpty())
                         errortv.setVisibility(View.VISIBLE);
                     else
                         Toast.makeText(getActivity(), getResources().getString(R.string.timetable_update_error), Toast.LENGTH_SHORT).show();
@@ -177,6 +147,15 @@ public class ViewFragment extends ListFragment implements PullToRefreshAttacher.
         });
     }
 
+    // Network finished, update adapter with new list
+    private void httpFinished(String csv){
+        this.lectures = TimeParser.lectures(csv, room);
+        adapter.notifyDataSetChanged(lectures);
+        ptra.setRefreshComplete();
+    }
+
+    // Method is called from PullToRefresh thingy,
+    // indicates a pulltorefresh action, duh
     @Override
     public void onRefreshStarted(View view) {
         updateLectures();

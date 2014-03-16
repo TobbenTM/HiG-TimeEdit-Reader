@@ -6,16 +6,10 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.CursorAdapter;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 
-import com.tobbentm.higreader.db.DBHelper;
-import com.tobbentm.higreader.db.DSLectures;
 import com.tobbentm.higreader.db.DSSubscriptions;
 
 import java.sql.SQLException;
@@ -26,7 +20,6 @@ import java.sql.SQLException;
 public class SubscriptionsFragment extends DialogFragment {
 
     private readyToUpdateListener listener;
-    private boolean update = false;
     private SubsCursorAdapter adapter;
     private Activity act;
 
@@ -62,6 +55,7 @@ public class SubscriptionsFragment extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_subs, null);
 
+        // using custom dialog builder to build dialog
         builder.setCustomView(view)
                 .setTitle(getResources().getString(R.string.subs_title))
                 .setAction(R.drawable.content_new, new View.OnClickListener() {
@@ -101,6 +95,5 @@ public class SubscriptionsFragment extends DialogFragment {
 
         adapter = new SubsCursorAdapter(getActivity(), datasource.getCursor(), 0);
         list.setAdapter(adapter);
-        datasource.close();
     }
 }

@@ -16,7 +16,7 @@ public class DSRecent {
     private String[] allColumns = {DBHelper.COLUMN_DB_ID, DBHelper.COLUMN_CLASS_ID, DBHelper.COLUMN_NAME};
 
     public DSRecent(Context context){
-        helper = new DBHelper(context);
+        helper = DBHelper.getInstance(context);
     }
 
     public void open() throws SQLException{

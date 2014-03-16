@@ -61,6 +61,8 @@
     <string name="pull_to_refresh_release_label">Slipp for å oppdatere…</string>
     <string name="pull_to_refresh_refreshing_label">Oppdaterer timeplan…</string>
 
+    <string name="reserv_title">Reservasjoner</string>
+
     <string name="widget_uknown_error">Ukjent feil, prøv å åpne appen.</string>
 
     <string-array name="search_array">

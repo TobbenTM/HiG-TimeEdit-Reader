@@ -1,5 +1,9 @@
 #HiG TimeEdit Reader
 
+##1.8.3
+* Another bugfix that work on issue #3, now implemented loaders, and altered handling of database-connections
+* Added shortcut to room reservations (opens browser)
+
 ##1.8.2
 * Fixes Issue #3 - FC after asynctask
 

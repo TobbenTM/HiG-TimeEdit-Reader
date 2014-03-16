@@ -1,10 +1,13 @@
 package com.tobbentm.higreader.db;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Tobias on 29.08.13.
  */
 
-public class DBLectures {
+public class DBLectures implements Parcelable {
 
     private int _id;
     private String _lecture_id;
@@ -33,6 +36,24 @@ public class DBLectures {
         this._lecturer = lecturer;
         this._date = date;
         this._time = time;
+    }
+
+    public DBLectures(String[] array) {
+        this._date = array[0];
+        this._time = array[1];
+        this._name = array[2];
+        this._room = array[3];
+        this._lecturer = array[4];
+    }
+
+    public DBLectures(Parcel in){
+        this._id = in.readInt();
+        this._lecture_id = in.readString();
+        this._name = in.readString();
+        this._room = in.readString();
+        this._lecturer = in.readString();
+        this._date = in.readString();
+        this._time = in.readString();
     }
 
     public int getID(){
@@ -91,4 +112,33 @@ public class DBLectures {
         this._time = time;
     }
 
+    public String toString(){
+        return "(" + this._date + ") " + this._name + ", " + this._lecturer + " - " + this._room;
+    }
+
+    public final Parcelable.Creator<DBLectures> CREATOR = new Parcelable.Creator<DBLectures>() {
+        public DBLectures createFromParcel(Parcel in) {
+            return new DBLectures(in);
+        }
+
+        public DBLectures[] newArray(int size) {
+            return new DBLectures[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(_id);
+        dest.writeString(_lecture_id);
+        dest.writeString(_name);
+        dest.writeString(_room);
+        dest.writeString(_lecturer);
+        dest.writeString(_date);
+        dest.writeString(_time);
+    }
 }

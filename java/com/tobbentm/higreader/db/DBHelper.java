@@ -10,6 +10,8 @@ import android.util.Log;
  */
 public class DBHelper extends SQLiteOpenHelper {
 
+    private static DBHelper instance;
+
     public static final String TABLE_LECTURES = "lectures";
     public static final String TABLE_TEMP_LECTURES = "templectures";
     public static final String TABLE_SUBSCRIPTIONS = "subscriptions";
@@ -31,7 +33,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String SETTING_LASTUPDATED = "lastupdated";
 
     public static final String DATABASE_NAME = "higreader.db";
-    public static final int DATABASE_VERSION = 9;
+    public static final int DATABASE_VERSION = 10;
 
     public static final String DATABASE_CREATE_1 =
             "create table " + TABLE_SUBSCRIPTIONS + "("
@@ -57,26 +59,26 @@ public class DBHelper extends SQLiteOpenHelper {
             + COLUMN_VALUE + " text not null"
             + ");";
     public static final String DATABASE_CREATE_4 =
-            "create table " + TABLE_TEMP_LECTURES + "("
-            + COLUMN_DB_ID + " integer primary key autoincrement, "
-            + COLUMN_LECTURE_ID + " text, "
-            + COLUMN_NAME + " text not null, "
-            + COLUMN_ROOM + " text, "
-            + COLUMN_LECTURER + " text, "
-            + COLUMN_DATE + " text not null, "
-            + COLUMN_TIME + " text not null"
-            + "); ";
-    public static final String DATABASE_CREATE_5 =
             "create table " + TABLE_RECENT + "("
             + COLUMN_DB_ID + " integer primary key autoincrement, "
             + COLUMN_CLASS_ID + " text not null, "
             + COLUMN_NAME + " text"
             + "); ";
 
+    public static final String DATABASE_MOD_1 =
+            "DROP TABLE IF EXISTS " + TABLE_TEMP_LECTURES;
+
     public static final String[] SETTINGS_VALUES = {SETTING_LASTUPDATED};
 
-    public DBHelper(Context context) {
+    private DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    public static DBHelper getInstance(Context context){
+        if(instance == null){
+            instance = new DBHelper(context.getApplicationContext());
+        }
+        return instance;
     }
 
     @Override
@@ -85,7 +87,6 @@ public class DBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(DATABASE_CREATE_2);
         sqLiteDatabase.execSQL(DATABASE_CREATE_3);
         sqLiteDatabase.execSQL(DATABASE_CREATE_4);
-        sqLiteDatabase.execSQL(DATABASE_CREATE_5);
         createSettings(sqLiteDatabase);
     }
 
@@ -98,7 +99,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 createSettings(sqLiteDatabase);
             case 8:
                 sqLiteDatabase.execSQL(DATABASE_CREATE_4);
-                sqLiteDatabase.execSQL(DATABASE_CREATE_5);
+            case 9:
+                sqLiteDatabase.execSQL(DATABASE_MOD_1);
         }
     }
 

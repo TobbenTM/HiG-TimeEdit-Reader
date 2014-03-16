@@ -2,6 +2,8 @@ package com.tobbentm.higreader;
 
 import android.util.Log;
 
+import com.tobbentm.higreader.db.DBLectures;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -22,7 +24,6 @@ public class TimeParser {
         String[] line;
         String currentdate = "", startTime, endTime = "0";
         ArrayList<ArrayList<String>> master = new ArrayList<ArrayList<String>>();
-        //Log.d("CSV", csv2);
 
         try {
             while((line = reader.readNext()) != null){
@@ -46,11 +47,11 @@ public class TimeParser {
                 }
                 ArrayList<String> inner = new ArrayList<String>();
 
-                inner.add(line[0]);
-                inner.add(line[1].replaceAll(" ", "")+"\n-\n"+line[3].replaceAll(" ", ""));
-                inner.add(line[4]);
-                inner.add(line[5]);
-                inner.add(line[6]);
+                inner.add(line[0]);     // Date
+                inner.add(line[1].replaceAll(" ", "")+"\n-\n"+line[3].replaceAll(" ", "")); // Timestamp
+                inner.add(line[4]);     // Title
+                inner.add(line[5]);     // Room
+                inner.add(line[6]);     // Lecturer
                 master.add(inner);
                 currentdate = line[0];
             }
@@ -61,8 +62,19 @@ public class TimeParser {
         return dimensionalPortal(master);
     }
 
+    // Function for generating DBLecture array from timetable()
+    public static DBLectures[] lectures(String csv, boolean room){
+        String[][] timetable = timetable(csv, room);
+        DBLectures[] lectures = new DBLectures[timetable.length];
+        for(int i = 0; i < timetable.length; i++){
+            lectures[i] = new DBLectures(timetable[i]);
+        }
+        return lectures;
+    }
+
     public static String[][] search(String html, String term){
-        //Log.d("PARSING", "Starting parser");
+        // TODO: Improve this function
+
         List<String> id = new ArrayList<String>();
         List<String> name = new ArrayList<String>();
         List<String> ids = new ArrayList<String>();
@@ -137,6 +149,7 @@ public class TimeParser {
     }
 
     private static String timeString(String start, String end){
+        // Generating 'pretty' time-strings
         return start.replaceFirst("([0-9]{2})", "$1:") + " - " + end.replaceFirst("([0-9]{2})", "$1:");
     }
 

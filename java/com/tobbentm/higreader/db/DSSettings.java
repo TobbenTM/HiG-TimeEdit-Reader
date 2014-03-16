@@ -15,7 +15,7 @@ public class DSSettings {
     private DBHelper helper;
 
     public DSSettings(Context context){
-        helper  = new DBHelper(context);
+        helper  = DBHelper.getInstance(context);
     }
 
     public void open() throws SQLException{
@@ -38,8 +38,7 @@ public class DSSettings {
 
     public int getSize(){
         Cursor cursor = database.rawQuery("SELECT * FROM "+DBHelper.TABLE_SETTINGS, null);
-        int rows = cursor.getCount();
-        return rows;
+        return cursor.getCount();
     }
 
 }

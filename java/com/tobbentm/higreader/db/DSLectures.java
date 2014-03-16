@@ -12,18 +12,9 @@ import java.util.List;
  * Created by Tobias on 29.08.13.
  */
 
-/*public static final String DATABASE_CREATE_2 =
-        "create table " + TABLE_LECTURES + "("
-        + COLUMN_DB_ID + " integer primary key autoincrement, "
-        + COLUMN_LECTURE_ID + " text not null, "
-        + COLUMN_NAME + " text not null, "
-        + COLUMN_ROOM + " text not null, "
-        + COLUMN_LECTURER + " text not null, "
-        + COLUMN_DATE + " text not null, "
-        + COLUMN_TIME + " text not null"
-        + "); ";*/
-
 public class DSLectures {
+
+    private static DSLectures instance;
 
     private SQLiteDatabase database;
     private DBHelper helper;
@@ -32,13 +23,15 @@ public class DSLectures {
         , DBHelper.COLUMN_ROOM, DBHelper.COLUMN_LECTURER, DBHelper.COLUMN_DATE, DBHelper.COLUMN_TIME};
 
     public DSLectures(Context context){
-        helper = new DBHelper(context);
+        helper = DBHelper.getInstance(context);
         this.table = DBHelper.TABLE_LECTURES;
     }
 
-    public DSLectures(Context context, String table){
-        helper = new DBHelper(context);
-        this.table = table;
+    public static DSLectures getInstance(Context context){
+        if(instance == null){
+            instance = new DSLectures(context.getApplicationContext());
+        }
+        return instance;
     }
 
     public void open() throws SQLException{
@@ -77,6 +70,11 @@ public class DSLectures {
 
     public Cursor getLecturesCursor(){
         return database.query(table, allColumns, null, null, null, null, null);
+    }
+
+    public int getSize(){
+        Cursor cursor = database.rawQuery("SELECT * FROM "+table, null);
+        return cursor.getCount();
     }
 
     public DBLectures cursorToLecture(Cursor cursor){

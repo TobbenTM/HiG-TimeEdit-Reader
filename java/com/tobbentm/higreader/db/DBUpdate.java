@@ -1,9 +1,8 @@
 package com.tobbentm.higreader.db;
 
+import android.content.AsyncTaskLoader;
 import android.content.Context;
-import android.os.AsyncTask;
 
-import com.tobbentm.higreader.DBDoneCallback;
 import com.tobbentm.higreader.TimeParser;
 
 import java.sql.SQLException;
@@ -11,60 +10,81 @@ import java.sql.SQLException;
 /**
  * Created by Tobias on 06.02.14.
  */
-public class DBUpdate extends AsyncTask<Void, Void, Void> {
+public class DBUpdate extends AsyncTaskLoader<DBLectures[]> {
 
     private Context ctx;
     private String csv;
-    private boolean room;
-    private boolean view;
-    DBDoneCallback callback;
+    DSLectures datasource;
+    DBLectures[] lectures;
 
-    public DBUpdate(Context ctx, String csv, boolean view,
-                    boolean room, DBDoneCallback callback){
-        this.ctx = ctx;
+    public DBUpdate(Context ctx, String csv){
+        super(ctx);
+        this.ctx = ctx.getApplicationContext();
         this.csv = csv;
-        this.room = room;
-        this.view = view;
-        this.callback = callback;
+    }
+
+    // Main async worker
+    @Override
+    public DBLectures[] loadInBackground() {
+        if(datasource == null){
+            datasource = DSLectures.getInstance(ctx);
+        }
+
+        if(!datasource.isOpen()){
+            try {
+                datasource.open();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // If csv is null we do not have any updated data,
+        // and thus only need to fetch from db
+        if(csv != null){
+            String[][] result = TimeParser.timetable(csv, false);
+
+            DBHelper helper = DBHelper.getInstance(ctx);
+
+            // Always truncate before adding new data
+            helper.truncate(helper.getWritableDatabase(), DBHelper.TABLE_LECTURES);
+            for(String[] arr : result){
+                datasource.addLecture(arr[2], arr[3], arr[4], arr[0], arr[1]);
+            }
+        }
+
+        lectures = datasource.getLectures().toArray(new DBLectures[datasource.getSize()]);
+        return lectures;
     }
 
     @Override
-    protected Void doInBackground(Void... params) {
-        String[][] result = TimeParser.timetable(csv, room);
-
-        DBHelper helper = new DBHelper(ctx);
-        DSLectures datasource;
-        if(view){
-            datasource = new DSLectures(ctx, DBHelper.TABLE_TEMP_LECTURES);
-        }else{
-            datasource = new DSLectures(ctx);
-        }
-
-        try {
-            datasource.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        String table;
-        if(view){
-            table = DBHelper.TABLE_TEMP_LECTURES;
-            helper.truncate(helper.getWritableDatabase(), DBHelper.TABLE_TEMP_LECTURES);
-        }else{
-            table = DBHelper.TABLE_LECTURES;
-        }
-
-        helper.truncate(helper.getWritableDatabase(), table);
-        for(String[] arr : result){
-            datasource.addLecture(arr[2], arr[3], arr[4], arr[0], arr[1]);
-        }
-
-        datasource.close();
-        return null;
+    public void deliverResult(DBLectures[] lectures) {
+        super.deliverResult(lectures);
     }
 
     @Override
-    protected void onPostExecute(Void v) {
-        callback.DBDone();
+    public void onCanceled(DBLectures[] lectures) {
+
     }
+
+    @Override
+    protected void onReset() {
+        super.onReset();
+        onStopLoading();
+    }
+
+    @Override
+    protected void onStartLoading() {
+        if (lectures != null) {
+            deliverResult(lectures);
+        }
+        if (takeContentChanged() || lectures == null) {
+            forceLoad();
+        }
+    }
+
+    @Override
+    protected void onStopLoading() {
+        cancelLoad();
+    }
+
 }

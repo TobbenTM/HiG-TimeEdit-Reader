@@ -1,8 +1,10 @@
 package com.tobbentm.higreader;
 
 import android.app.ActionBar;
+import android.app.FragmentManager;
 import android.app.ListFragment;
-import android.database.Cursor;
+import android.app.LoaderManager;
+import android.content.Loader;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,12 +14,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.tobbentm.higreader.db.DBHelper;
+import com.tobbentm.higreader.db.DBLectures;
 import com.tobbentm.higreader.db.DBSubscriptions;
 import com.tobbentm.higreader.db.DBUpdate;
 import com.tobbentm.higreader.db.DSLectures;
@@ -25,6 +27,7 @@ import com.tobbentm.higreader.db.DSSettings;
 import com.tobbentm.higreader.db.DSSubscriptions;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -33,7 +36,8 @@ import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 /**
  * Created by Tobias on 27.08.13.
  */
-public class TimeTableFragment extends ListFragment implements PullToRefreshAttacher.OnRefreshListener {
+public class TimeTableFragment extends ListFragment implements PullToRefreshAttacher.OnRefreshListener,
+        LoaderManager.LoaderCallbacks<DBLectures[]>{
 
     TextView errortv;
     DSLectures datasource;
@@ -42,7 +46,10 @@ public class TimeTableFragment extends ListFragment implements PullToRefreshAtta
     DBHelper helper;
     private PullToRefreshAttacher ptra;
     private Date date = new Date();
-    private LectureCursorAdapter adapter;
+    private LectureArrayAdapter adapter;
+    private FragmentManager fm;
+    private LoaderManager lm;
+    private static final int TIMETABLE_LOADER_ID = 1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
@@ -63,12 +70,14 @@ public class TimeTableFragment extends ListFragment implements PullToRefreshAtta
         super.onActivityCreated(savedInstanceState);
 
         // Initiating datasources and helper
-        datasource = new DSLectures(getActivity());
+        datasource = DSLectures.getInstance(getActivity());
         subscriptionsDatasource = new DSSubscriptions(getActivity());
         settingsDatasource = new DSSettings(getActivity());
-        helper = new DBHelper(getActivity());
+        helper = DBHelper.getInstance(getActivity());
 
-        // Main timetable dont need to have custom title, and to go up
+        fm = getFragmentManager();
+
+        // Main timetable don't need to have custom title, nor to go up
         ActionBar ab = getActivity().getActionBar();
         ab.setTitle(getActivity().getResources().getString(R.string.timetable_title));
         ab.setDisplayHomeAsUpEnabled(false);
@@ -79,17 +88,22 @@ public class TimeTableFragment extends ListFragment implements PullToRefreshAtta
             subscriptionsDatasource.open();
             settingsDatasource.open();
         } catch (SQLException e) {
-            //Log.d("ERROR", "SQException in TimeTableFragment onActivityCreated");
             e.printStackTrace();
         }
 
+        // Deletes lectures older than today
         datasource.deleteOld();
-        Cursor cursor = datasource.getLecturesCursor();
-        //getActivity().startManagingCursor(cursor); //Just caused bugs, hacked around it in onResume and onPause
 
-        adapter = new LectureCursorAdapter(getActivity(), cursor, 0);
+        // Setting us up the adapter
+        adapter = new LectureArrayAdapter(getActivity(), android.R.id.list, new ArrayList<DBLectures>());
         setListAdapter(adapter);
 
+        // LoaderManager stuff
+        LoaderManager.LoaderCallbacks<DBLectures[]> loaderCallbacks = this;
+        lm = getLoaderManager();
+        lm.initLoader(TIMETABLE_LOADER_ID, null, loaderCallbacks);
+
+        // Check if an update is wanted
         checkUpdate();
     }
 
@@ -117,31 +131,15 @@ public class TimeTableFragment extends ListFragment implements PullToRefreshAtta
         // Empty function to remove onClick animation/color on lectures
     }
 
-    @Override
-    public void onPause(){
-        super.onPause();
-        datasource.close();
-        settingsDatasource.close();
-        subscriptionsDatasource.close();
-        adapter.notifyDataSetInvalidated();
-        adapter.changeCursor(null);
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        try {
-            datasource.open();
-            subscriptionsDatasource.open();
-            settingsDatasource.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        adapter.changeCursor(datasource.getLecturesCursor());
-        adapter.notifyDataSetChanged();
-    }
-
     public void updateLectures(){
+        if(!subscriptionsDatasource.isOpen()){
+            try {
+                subscriptionsDatasource.open();
+            } catch (SQLException e) {
+                return;
+            }
+        }
+
         ptra.setRefreshing(true);
         String ids = "";
         List<DBSubscriptions> list = subscriptionsDatasource.getSubscriptions();
@@ -162,28 +160,7 @@ public class TimeTableFragment extends ListFragment implements PullToRefreshAtta
                     if(response != null && response.length() > 0){
                         errortv.setVisibility(View.GONE);
 
-                        DBUpdate update = new DBUpdate(getActivity(), response,
-                                false, false, new DBDoneCallback() {
-                            @Override
-                            public void DBDone() {
-                                if(getActivity() != null){
-                                    if(!datasource.isOpen())
-                                        try {
-                                            datasource.open();
-                                            settingsDatasource.open();
-                                        } catch (SQLException e) {
-                                            e.printStackTrace();
-                                        }
-                                    Cursor cursor = datasource.getLecturesCursor();
-                                    adapter.changeCursor(cursor);
-                                    adapter.notifyDataSetChanged();
-                                    Long time = date.getTime();
-                                    settingsDatasource.updateSetting(DBHelper.SETTING_LASTUPDATED, time.toString());
-                                    ptra.setRefreshComplete();
-                                }
-                            }
-                        });
-                        update.execute();
+                        httpFinished(response);
                     }else{
                         if(adapter.isEmpty())
                             errortv.setVisibility(View.VISIBLE);
@@ -206,12 +183,15 @@ public class TimeTableFragment extends ListFragment implements PullToRefreshAtta
         });
     }
 
+    // Function to check if an update is wanted, and updates timetable
     private void checkUpdate(){
+        // Getting timestamp for the last update
         String lastupdated = settingsDatasource.getSetting(DBHelper.SETTING_LASTUPDATED);
         Long time;
         try{
             time = Long.parseLong(lastupdated);
         }catch (NumberFormatException e){
+            // No timestamp for last update, set to zero to force update
             time = 0L;
         }
         if(subscriptionsDatasource.getSize() != 0){
@@ -221,8 +201,41 @@ public class TimeTableFragment extends ListFragment implements PullToRefreshAtta
         }
     }
 
+    // Network finished, call for loader restart
+    // in order to do DB and adapter updates
+    private void httpFinished(String csv){
+        Bundle bundle = new Bundle();
+        bundle.putString("csv", csv);
+        lm.restartLoader(TIMETABLE_LOADER_ID, bundle, this);
+    }
+
+    // Method is called from PullToRefresh thingy,
+    // indicates a pulltorefresh action, duh
     @Override
     public void onRefreshStarted(View view) {
         updateLectures();
+    }
+
+    // Loader manager callbacks
+    @Override
+    public Loader<DBLectures[]> onCreateLoader(int id, Bundle args) {
+        if(args != null){
+            Log.d("higreader", "onCreateLoader(), args != NULL");
+            return new DBUpdate(getActivity(), args.getString("csv"));
+        }
+        return new DBUpdate(getActivity(), null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<DBLectures[]> loader, DBLectures[] data) {
+        adapter.notifyDataSetChanged(data);
+        Long time = date.getTime();
+        settingsDatasource.updateSetting(DBHelper.SETTING_LASTUPDATED, time.toString());
+        ptra.setRefreshComplete();
+    }
+
+    @Override
+    public void onLoaderReset(Loader loader) {
+        adapter.notifyDataSetInvalidated();
     }
 }

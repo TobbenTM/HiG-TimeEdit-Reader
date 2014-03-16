@@ -3,9 +3,7 @@ package com.tobbentm.higreader.db;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -21,7 +19,7 @@ public class DSSubscriptions {
     private String[] allColumns = {DBHelper.COLUMN_DB_ID, DBHelper.COLUMN_CLASS_ID, DBHelper.COLUMN_NAME, DBHelper.COLUMN_EXCLUDED};
 
     public DSSubscriptions(Context context){
-        helper = new DBHelper(context);
+        helper = DBHelper.getInstance(context);
     }
 
     public void open() throws SQLException{
@@ -30,6 +28,10 @@ public class DSSubscriptions {
 
     public void close(){
         helper.close();
+    }
+
+    public boolean isOpen(){
+        return database.isOpen();
     }
 
     public void addSubscription(String id, String name){
