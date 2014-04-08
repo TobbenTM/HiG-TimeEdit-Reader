@@ -57,7 +57,6 @@ public class MainActivity extends Activity implements
         // Checking if there is no subscriptions (first time)
         if(subscriptionsDatasource.getSize() == 0){
             dbTruncate();
-            dbhelper.truncate(dbhelper.getWritableDatabase(), DBHelper.TABLE_LECTURES);
             showWelcomeDialog();
             showTimeTable();
         }else{
@@ -70,7 +69,6 @@ public class MainActivity extends Activity implements
     private void showTimeTable(){
         // If fragment is not null, we will not add it another time
         if(fm.findFragmentByTag("fragment_timetable") == null){
-            findViewById(R.id.activity_pb).setVisibility(View.GONE);
             timeTableFragment = new TimeTableFragment();
             FragmentTransaction ft = fm.beginTransaction();
             ft.replace(R.id.activity_frame, timeTableFragment, "fragment_timetable");

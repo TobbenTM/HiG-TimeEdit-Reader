@@ -1,5 +1,8 @@
 #HiG TimeEdit Reader
 
+##1.8.4
+* Quick bugfix: removed activity spinner (not really needed)
+
 ##1.8.3
 * Another bugfix that work on issue #3, now implemented loaders, and altered handling of database-connections
 * Added shortcut to room reservations (opens browser)
