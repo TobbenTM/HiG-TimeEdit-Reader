@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
@@ -32,14 +33,17 @@ public class MainActivity extends Activity implements
     ViewFragment viewFragment;
     private PullToRefreshAttacher ptra;
     private DBHelper dbhelper;
-    private DSSubscriptions subscriptionsDatasource;
+
+    public static final String SP_NAME = "higreaderprefs";
+    public static final String SP_LAST = "lastupdated";
+    public static final String SP_RANGE = "range";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         dbhelper = DBHelper.getInstance(this);
-        subscriptionsDatasource = new DSSubscriptions(this);
+        DSSubscriptions subscriptionsDatasource = new DSSubscriptions(this);
 
         try {
             subscriptionsDatasource.open();
@@ -49,7 +53,7 @@ public class MainActivity extends Activity implements
 
         // Options for PullToRefreshAttacher, and setting draw distance to 60% of listview
         PullToRefreshAttacher.Options ptraOpt = new PullToRefreshAttacher.Options();
-        ptraOpt.refreshScrollDistance = 0.60F;
+        ptraOpt.refreshScrollDistance = 0.40F;
 
         // Necessary to assign in activity, will be fetched from fragments
         ptra = PullToRefreshAttacher.get(this, ptraOpt);
@@ -78,7 +82,11 @@ public class MainActivity extends Activity implements
 
     // Fragment transaction for ViewFragment
     private void showViewFragment(String name, String id){
-        viewFragment = new ViewFragment(name, id);
+        viewFragment = new ViewFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("name", name);
+        bundle.putString("id", id);
+        viewFragment.setArguments(bundle);
         FragmentTransaction ft = fm.beginTransaction();
         ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out, android.R.animator.fade_in, android.R.animator.fade_out);
         ft.replace(R.id.activity_frame, viewFragment, "fragment_view");

@@ -7,6 +7,7 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -30,6 +31,8 @@ import android.widget.Toast;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.tobbentm.higreader.db.DBHelper;
 import com.tobbentm.higreader.db.DSRecent;
+
+import org.apache.http.Header;
 
 import java.sql.SQLException;
 
@@ -61,12 +64,14 @@ public class SearchAdvFragment extends DialogFragment {
         datasource = new DSRecent(getActivity());
         try {
             datasource.open();
+            if(datasource.getSize() > 0)
+                recent = true;
         } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (SQLiteException e) {
             e.printStackTrace();
         }
 
-        if(datasource.getSize() > 0)
-            recent = true;
     }
 
     @Override
@@ -243,7 +248,8 @@ public class SearchAdvFragment extends DialogFragment {
                         //Send to network class
                         Network.search(term, spinner.getSelectedItem().toString(), getResources().getStringArray(R.array.sa_search_array), new AsyncHttpResponseHandler(){
                             @Override
-                            public void onSuccess(String response){
+                            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody){
+                                String response = new String(responseBody);
                                 Log.d("DIALOG", "onSuccess starting");
 
                                 //Get parsed results from parser
@@ -288,9 +294,9 @@ public class SearchAdvFragment extends DialogFragment {
                                 }
                             }
                             @Override
-                            public void onFailure(Throwable e, String response){
+                            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error){
                                 Toast.makeText(getActivity(), getResources().getString(R.string.add_net_failure), Toast.LENGTH_LONG).show();
-                                Log.d("NET", e.toString());
+                                Log.d("NET", error.toString());
                             }
                         });
                     }else{

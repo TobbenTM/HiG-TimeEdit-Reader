@@ -4,7 +4,7 @@ Play store link: https://play.google.com/store/apps/details?id=com.tobbentm.higr
 
 Currently in stage: 
 * Prod: 1.8.4
-* Beta: 1.8.4
+* Beta: 1.9
 
 ![Icon](http://tobbentm.com/ul/HiG-Reader_Icon.png "App Icon")
 
@@ -40,8 +40,6 @@ See [CHANGELOG.md](CHANGELOG.md) file
 * Need message for when there are no upcoming lectures withing the timeframe
 * Merge all search fragments into one
 * Comment all the code
-* ~~Thread DB stuff / optimise lecture listview~~
-* ~~Abstract lecture updating~~
 
 ##Known bugs:
 

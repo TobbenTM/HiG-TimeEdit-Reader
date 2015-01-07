@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.ListFragment;
 import android.app.LoaderManager;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,8 +24,9 @@ import com.tobbentm.higreader.db.DBLectures;
 import com.tobbentm.higreader.db.DBSubscriptions;
 import com.tobbentm.higreader.db.DBUpdate;
 import com.tobbentm.higreader.db.DSLectures;
-import com.tobbentm.higreader.db.DSSettings;
 import com.tobbentm.higreader.db.DSSubscriptions;
+
+import org.apache.http.Header;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -42,13 +44,13 @@ public class TimeTableFragment extends ListFragment implements PullToRefreshAtta
     TextView errortv;
     DSLectures datasource;
     DSSubscriptions subscriptionsDatasource;
-    DSSettings settingsDatasource;
     DBHelper helper;
     private PullToRefreshAttacher ptra;
     private Date date = new Date();
     private LectureArrayAdapter adapter;
     private FragmentManager fm;
     private LoaderManager lm;
+    private SharedPreferences settings;
     private static final int TIMETABLE_LOADER_ID = 1;
 
     @Override
@@ -72,8 +74,8 @@ public class TimeTableFragment extends ListFragment implements PullToRefreshAtta
         // Initiating datasources and helper
         datasource = DSLectures.getInstance(getActivity());
         subscriptionsDatasource = new DSSubscriptions(getActivity());
-        settingsDatasource = new DSSettings(getActivity());
         helper = DBHelper.getInstance(getActivity());
+        settings = getActivity().getSharedPreferences(MainActivity.SP_NAME, 0);
 
         fm = getFragmentManager();
 
@@ -86,7 +88,6 @@ public class TimeTableFragment extends ListFragment implements PullToRefreshAtta
         try {
             datasource.open();
             subscriptionsDatasource.open();
-            settingsDatasource.open();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -155,9 +156,10 @@ public class TimeTableFragment extends ListFragment implements PullToRefreshAtta
 
         Network.timetable(ids, new AsyncHttpResponseHandler() {
             @Override
-            public void onSuccess(String response) {
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody){
+                String response = new String(responseBody);
                 if(datasource.isOpen()){
-                    if(response != null && response.length() > 0){
+                    if(response.length() > 0){
                         errortv.setVisibility(View.GONE);
 
                         httpFinished(response);
@@ -166,12 +168,12 @@ public class TimeTableFragment extends ListFragment implements PullToRefreshAtta
                             errortv.setVisibility(View.VISIBLE);
                         else
                             Toast.makeText(getActivity(), getResources().getString(R.string.timetable_update_error), Toast.LENGTH_SHORT).show();
-                        onFailure(null, null);
+                        onFailure(0, null, null, null);
                     }
                 }
             }
             @Override
-            public void onFailure(Throwable e, String response){
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error){
                 if(isAdded() && datasource.isOpen()){
                     ptra.setRefreshComplete();
                     if(adapter.isEmpty())
@@ -186,16 +188,9 @@ public class TimeTableFragment extends ListFragment implements PullToRefreshAtta
     // Function to check if an update is wanted, and updates timetable
     private void checkUpdate(){
         // Getting timestamp for the last update
-        String lastupdated = settingsDatasource.getSetting(DBHelper.SETTING_LASTUPDATED);
-        Long time;
-        try{
-            time = Long.parseLong(lastupdated);
-        }catch (NumberFormatException e){
-            // No timestamp for last update, set to zero to force update
-            time = 0L;
-        }
+        Long time = settings.getLong(MainActivity.SP_LAST, 0L);
         if(subscriptionsDatasource.getSize() != 0){
-            if(settingsDatasource.getSize() != 0 && time < date.getTime() - (2*60*60*1000)){
+            if(time < date.getTime() - (2*60*60*1000)){
                 updateLectures();
             }
         }
@@ -230,7 +225,11 @@ public class TimeTableFragment extends ListFragment implements PullToRefreshAtta
     public void onLoadFinished(Loader<DBLectures[]> loader, DBLectures[] data) {
         adapter.notifyDataSetChanged(data);
         Long time = date.getTime();
-        settingsDatasource.updateSetting(DBHelper.SETTING_LASTUPDATED, time.toString());
+
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putLong(MainActivity.SP_LAST, time);
+        editor.apply();
+
         ptra.setRefreshComplete();
     }
 

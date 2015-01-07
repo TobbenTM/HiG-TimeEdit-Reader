@@ -16,6 +16,8 @@ import android.widget.Toast;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.tobbentm.higreader.db.DBLectures;
 
+import org.apache.http.Header;
+
 import java.util.ArrayList;
 
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
@@ -32,12 +34,9 @@ public class ViewFragment extends ListFragment implements PullToRefreshAttacher.
     private boolean room = false;
     private LectureArrayAdapter adapter;
 
-    public ViewFragment(String name, String id){
-        this.name = name;
-        this.id = id;
-    }
+    public ViewFragment(){
 
-    public ViewFragment(){}
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
@@ -52,6 +51,10 @@ public class ViewFragment extends ListFragment implements PullToRefreshAttacher.
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        Bundle args = this.getArguments();
+        this.name = args.getString("name");
+        this.id = args.getString("id");
 
         // savedInstanceState is not null if this fragment has existed before,
         // and if it has this will get name, id and lectures from last time
@@ -118,7 +121,8 @@ public class ViewFragment extends ListFragment implements PullToRefreshAttacher.
 
         Network.timetable(id, new AsyncHttpResponseHandler() {
             @Override
-            public void onSuccess(String response) {
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody){
+                String response = new String(responseBody);
                 if (response != null && response.length() > 0) {
                     errortv.setVisibility(View.GONE);
                     if (id.contains(".185"))
@@ -130,12 +134,12 @@ public class ViewFragment extends ListFragment implements PullToRefreshAttacher.
                         errortv.setVisibility(View.VISIBLE);
                     else
                         Toast.makeText(getActivity(), getResources().getString(R.string.timetable_update_error), Toast.LENGTH_SHORT).show();
-                    onFailure(null, null);
+                    onFailure(0, null, null, null);
                 }
             }
 
             @Override
-            public void onFailure(Throwable e, String response) {
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error){
                 if (isAdded()) {
                     ptra.setRefreshComplete();
                     if (adapter.isEmpty())
