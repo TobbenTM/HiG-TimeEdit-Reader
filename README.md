@@ -21,7 +21,7 @@ Want to port this to your institution of choice?
 
 2 Options:
 
-* Use my [TimeEdit Reader](https://play.google.com/store/apps/details?id=com.tobbentm.timeeditreader) app, which currently supports 45 different institutions.
+* Use my [TimeTable Reader](https://play.google.com/store/apps/details?id=com.tobbentm.timeeditreader) app, which currently supports over 50 different institutions.
 * See the [PORTING.md](PORTING.md) file.
 
 ##License:
@@ -34,7 +34,6 @@ See [CHANGELOG.md](CHANGELOG.md) file
 
 ##TODO:
 
-* Create PORTING.md guide to porting this app
 * Make the homescreen widget able to fetch timetable from timeedit
 * Update screenshots with new sexy dialogs
 * Need message for when there are no upcoming lectures withing the timeframe
