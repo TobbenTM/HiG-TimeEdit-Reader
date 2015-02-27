@@ -18,7 +18,7 @@ import au.com.bytecode.opencsv.CSVReader;
  */
 public class TimeParser {
 
-    public static String[][] timetable(String csv, boolean room){
+    public static String[][] timetable(String csv, boolean room){ // Assumes SID=3
         String csv2 = csv.split("\n", 5)[4];
         CSVReader reader = new CSVReader(new StringReader(csv2), ',', '"');
         String[] line;
@@ -54,6 +54,28 @@ public class TimeParser {
                 inner.add(line[6]);     // Lecturer
                 master.add(inner);
                 currentdate = line[0];
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return dimensionalPortal(master);
+    }
+
+    public static String[][] studyrooms(String csv){ // Assumes SID=3
+        String csv2 = csv.split("\n", 5)[4];
+        CSVReader reader = new CSVReader(new StringReader(csv2), ',', '"');
+        String[] line;
+        ArrayList<ArrayList<String>> master = new ArrayList<ArrayList<String>>();
+
+        try {
+            while((line = reader.readNext()) != null){
+                ArrayList<String> inner = new ArrayList<String>();
+
+                inner.add(line[1]);     // Starttime
+                inner.add(line[3]);     // Endtime
+                inner.add(line[5]);     // Room
+                master.add(inner);
             }
         } catch (IOException e) {
             e.printStackTrace();

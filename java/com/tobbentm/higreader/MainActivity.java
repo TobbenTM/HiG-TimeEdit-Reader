@@ -22,12 +22,14 @@ public class MainActivity extends Activity implements
         WelcomeFragment.readyToUpdateListener,
         AddSubFragment.readyToUpdateListener,
         SubscriptionsFragment.readyToUpdateListener,
-        SearchAdvFragment.openTimeTableListener {
+        SearchAdvFragment.openTimeTableListener,
+        StudyRoomsFragment.openTimeTableListener {
 
     FragmentManager fm = getFragmentManager();
     SubscriptionsFragment subsFragment;
     AddSubFragment addFragment;
     SearchAdvFragment saFragment;
+    StudyRoomsFragment srFragment;
     TimeTableFragment timeTableFragment;
     WelcomeFragment welcomeFragment;
     ViewFragment viewFragment;
@@ -124,6 +126,11 @@ public class MainActivity extends Activity implements
         saFragment.show(fm, "fragment_search_adv");
     }
 
+    private void showStudyRooms(){
+        srFragment = new StudyRoomsFragment();
+        srFragment.show(fm, "fragment_study_rooms");
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -140,6 +147,9 @@ public class MainActivity extends Activity implements
                 return true;
             case R.id.action_subs:
                 showSubsDialog();
+                return true;
+            case R.id.action_studyrooms:
+                showStudyRooms();
                 return true;
             case R.id.action_reserv:
                 openReservationsURL();

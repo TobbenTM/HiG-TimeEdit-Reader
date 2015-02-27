@@ -63,6 +63,9 @@
 
     <string name="reserv_title">Reservasjoner</string>
 
+    <string name="sr_close_btn">Lukk</string>
+    <string name="sr_title">Grupperom</string>
+
     <string name="widget_uknown_error">Ukjent feil, prøv å åpne appen.</string>
 
     <string-array name="search_array">

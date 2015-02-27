@@ -1,5 +1,11 @@
 #HiG TimeEdit Reader
 
+##1.10
+* New feature: studyrooms
+
+##1.9
+* Several bugfixes
+
 ##1.8.4
 * Quick bugfix: removed activity spinner (not really needed)
 

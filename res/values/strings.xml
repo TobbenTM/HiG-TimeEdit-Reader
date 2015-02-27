@@ -63,6 +63,11 @@
 
     <string name="reserv_title">Reservations</string>
 
+    <string name="sr_title">Study Rooms</string>
+    <string name="sr_close_btn">Close</string>
+    <string name="sr_taken">Taken</string>
+    <string name="sr_network_error">Something went wrong!</string>
+
     <string name="widget_uknown_error">Uknown error. Try opening the app.</string>
 
     <string-array name="search_array">

@@ -8,6 +8,10 @@
           android:title="@string/action_subscriptions"
           android:orderInCategory="10"
           android:showAsAction="never" />
+    <item android:id="@+id/action_studyrooms"
+        android:title="@string/sr_title"
+        android:orderInCategory="15"
+        android:showAsAction="never" />
     <item android:id="@+id/action_reserv"
         android:title="@string/reserv_title"
         android:orderInCategory="20"

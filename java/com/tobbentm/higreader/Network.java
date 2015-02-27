@@ -1,5 +1,7 @@
 package com.tobbentm.higreader;
 
+import android.util.Log;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -14,16 +16,22 @@ public class Network {
     private static AsyncHttpClient client = new AsyncHttpClient();
 
     public static void timetable(String ids, AsyncHttpResponseHandler handler){
+        timetable(ids, 14, 3, handler); // 14 days, sid=3 => "Default timetable"
+    }
+
+    public static void timetable(String ids, int days, int sid, AsyncHttpResponseHandler handler){
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
         Calendar cal = Calendar.getInstance();
 
         // Generating date strings for setting search period
         String startDate = df.format(cal.getTime());
-        cal.add(Calendar.DAY_OF_YEAR, 14); // Add 14 days
+        cal.add(Calendar.DAY_OF_YEAR, days); // Add 14 days
         String endDate = df.format(cal.getTime());
 
-        final String baseURL = "https://web.timeedit.se/hig_no/db1/open/r.csv?sid=3&h=t&p="+startDate+".x%2C"+endDate+".x&objects=";
+        final String baseURL = "https://web.timeedit.se/hig_no/db1/open/r.csv?sid="+sid+"&h=t&p="+startDate+".x%2C"+endDate+".x&objects=";
         final String endURL = "&ox=0&types=0&fe=0&l=en&g=f";
+
+        Log.d("HIGREADER", baseURL + ids + endURL);
 
         client.get(baseURL + ids + endURL, handler);
     }
