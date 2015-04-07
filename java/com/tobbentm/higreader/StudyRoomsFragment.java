@@ -150,7 +150,7 @@ public class StudyRoomsFragment extends DialogFragment {
                             && !room[2].startsWith("< ")){
                         room[2] = "< " + res[0];
                     }
-                    break;
+                    //break;
                 }
             }
             Log.d("HIGREADER", res[0] + ", " + res[1] + ", " + res[2]);

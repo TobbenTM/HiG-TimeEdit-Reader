@@ -28,7 +28,7 @@ public class Network {
         cal.add(Calendar.DAY_OF_YEAR, days); // Add 14 days
         String endDate = df.format(cal.getTime());
 
-        final String baseURL = "https://web.timeedit.se/hig_no/db1/open/r.csv?sid="+sid+"&h=t&p="+startDate+".x%2C"+endDate+".x&objects=";
+        final String baseURL = "https://no.timeedit.net/web/hig/db1/open/r.csv?sid="+sid+"&h=t&p="+startDate+".x%2C"+endDate+".x&objects=";
         final String endURL = "&ox=0&types=0&fe=0&l=en&g=f";
 
         Log.d("HIGREADER", baseURL + ids + endURL);
@@ -52,14 +52,14 @@ public class Network {
             iType = 0;
         }
 
-        final String baseURL = "https://web.timeedit.se/hig_no/db1/timeedit/p/open/objects.html?max=15&partajax=t&l=en&sid=3&types=" + iType + "&search_text=";
+        final String baseURL = "https://no.timeedit.net/web/hig/db1/timeedit/p/open/objects.html?max=15&partajax=t&l=en&sid=3&types=" + iType + "&search_text=";
 
         // TODO: Check for more illegal characters?
         client.get(baseURL + term.replaceAll(" ", "%20"), handler);
     }
 
     public static void search(String term, String type, AsyncHttpResponseHandler handler){
-        final String baseURL = "https://web.timeedit.se/hig_no/db1/timeedit/p/open/objects.html?max=15&partajax=t&l=en&types=" + type + "&search_text=";
+        final String baseURL = "https://no.timeedit.net/web/hig/db1/timeedit/p/open/objects.html?max=15&partajax=t&l=en&types=" + type + "&search_text=";
         client.get(baseURL + term, handler);
     }
 }

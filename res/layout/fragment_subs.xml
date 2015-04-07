@@ -7,7 +7,9 @@
     <ListView
         android:id="@+id/subs_list"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:divider="#90AAAAAA"
+        android:dividerHeight="1dp" />
 
     <View android:layout_height="1dp"
         android:layout_width="fill_parent"

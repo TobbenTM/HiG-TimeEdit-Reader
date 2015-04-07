@@ -1,5 +1,10 @@
 #HiG TimeEdit Reader
 
+##1.11
+* Updated URL to new endpoint
+* Minor cosmetic changes
+* Studyrooms bugfix
+
 ##1.10
 * New feature: studyrooms
 
